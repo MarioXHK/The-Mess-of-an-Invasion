@@ -1,0 +1,7 @@
+image = "background-969.png"
+name = "Tree"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -70
+frames=2
+framespeed=16

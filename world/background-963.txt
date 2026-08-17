@@ -1,0 +1,7 @@
+image = "background-963.png"
+name = "Pipe Top"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -65
+frames=1
+framespeed=16

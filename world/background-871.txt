@@ -1,0 +1,9 @@
+image = "background-871.png"
+name = "Terrain Top Left 8"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=16
+grid-offset-y=16

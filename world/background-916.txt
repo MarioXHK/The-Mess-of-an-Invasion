@@ -1,0 +1,8 @@
+image = "background-916.png"
+name = "Far away Hills"
+group = "Super Mario Bros. 3"
+category = "Far Away Scenery"
+priority = -85
+frames=1
+framespeed=16
+grid=16

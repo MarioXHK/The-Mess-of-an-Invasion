@@ -1,0 +1,16 @@
+image = "background-92.png"
+name = "Terrain Bottom Middle 7 (Lava)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=0
+grid-offset-y=0
+
+lightoffsetx = 0
+lightoffsety = 0
+lightradius = 32
+lightbrightness = 0.5
+lightcolor = red
+lightflicker = false

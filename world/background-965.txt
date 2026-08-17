@@ -1,0 +1,7 @@
+image = "background-965.png"
+name = "Pipe Bottom"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -65
+frames=1
+framespeed=16

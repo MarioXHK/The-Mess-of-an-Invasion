@@ -1,0 +1,7 @@
+image = "background-930.png"
+name = "Water"
+group = "Super Mario Bros. 3"
+category = "Terrain Fluids"
+priority = -95
+frames=1
+framespeed=16

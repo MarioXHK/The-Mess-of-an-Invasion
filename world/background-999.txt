@@ -1,0 +1,7 @@
+image = "background-999.png"
+icon = "background-999i.png"
+name = "Overlay Guide"
+group = "Miscellaneous"
+category = "Misc"
+description = "A guide for what part of the default overlay will block the screen."
+priority = -99

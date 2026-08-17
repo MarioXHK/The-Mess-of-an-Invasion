@@ -1,0 +1,8 @@
+image = "background-924.png"
+name = "Far away Horizontal Path"
+group = "Super Mario Bros. 3"
+category = "Far Away Scenery"
+priority = -85
+frames=1
+framespeed=16
+grid=8

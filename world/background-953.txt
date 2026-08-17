@@ -1,0 +1,7 @@
+image = "background-953.png"
+name = "Castle Wall Front"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -70
+frames=1
+framespeed=16

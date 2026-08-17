@@ -1,0 +1,7 @@
+sizable=true
+passthrough=true
+semisolid=false
+lightradius=0
+name = "Terrain Sizable 5"
+group = "Super Mario Bros. 3"
+category = "Terrain"

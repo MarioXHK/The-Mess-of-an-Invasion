@@ -1,0 +1,7 @@
+image = "background-935.png"
+name = "Palm Tree"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -70
+frames=4
+framespeed=16

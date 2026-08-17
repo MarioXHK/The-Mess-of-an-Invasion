@@ -1,0 +1,7 @@
+image = "background-951.png"
+name = "Mushroom (Blue)"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -70
+frames=1
+framespeed=16

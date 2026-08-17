@@ -1,0 +1,7 @@
+image = "background-967.png"
+name = "Smiling Tree"
+group = "Super Mario Bros. 3"
+category = "Scenery"
+priority = -70
+frames=2
+framespeed=16

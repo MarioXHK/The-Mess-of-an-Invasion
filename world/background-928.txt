@@ -1,0 +1,8 @@
+image = "background-928.png"
+name = "Far away Palm Trees"
+group = "Super Mario Bros. 3"
+category = "Far Away Scenery"
+priority = -85
+frames=4
+framespeed=16
+grid=16

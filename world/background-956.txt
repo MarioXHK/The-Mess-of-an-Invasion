@@ -1,0 +1,14 @@
+image = "background-956.png"
+name = "Lava 4x4"
+group = "Super Mario Bros. 3"
+category = "Terrain Fluids"
+priority = -95
+frames=4
+framespeed=16
+
+lightoffsetx = 0
+lightoffsety = 0
+lightradius = 160
+lightbrightness = 0.75
+lightcolor = red
+lightflicker = false

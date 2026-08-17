@@ -1,0 +1,13 @@
+fill-color = 0x73D3EFFF
+
+[Water]
+img="background-959.png"
+parallaxX=1
+parallaxY=1
+alignY=BOTTOM
+alignX=RIGHT
+repeatX=true
+repeatY=true
+frames=4
+framespeed=16
+priority = -100

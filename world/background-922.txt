@@ -1,0 +1,8 @@
+image = "background-922.png"
+name = "Far away Pipe"
+group = "Super Mario Bros. 3"
+category = "Far Away Scenery"
+priority = -84
+frames=1
+framespeed=16
+grid=16
