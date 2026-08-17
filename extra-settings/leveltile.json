@@ -1,0 +1,372 @@
+{
+	"style": "groupbox",
+	"title": "Level Tile Settings",
+	"layout": [
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that this tile leads to.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "levelTitle",
+			"title": "Level Title",
+			"tooltip": "Title shown when standing on this tile.",
+			"value-default": ""
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "warp",
+		  	"title": "Warp ID",
+			"tooltip": "The ID of the warp to enter through when going into the level.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 1000
+		},
+		{
+			"control": "checkBox",
+		  	"name": "once",
+		  	"title": "Only Once",
+			"tooltip": "If enabled, the level cannot be enterable after beaten.",
+			"value-default": true
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "stars",
+		  	"title": "Stars required",
+			"tooltip": "The amount of stars required to access this level.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 10000
+		},
+		{
+			"control": "checkBox",
+		  	"name": "mark",
+		  	"title": "Mark on map as complete",
+			"tooltip": "If disabled, the level will not be visibly effected even if it's been beaten.",
+			"value-default": true
+		},
+		{
+			"control": "checkBox",
+		  	"name": "helpcall",
+		  	"title": "Shout for help",
+			"tooltip": "If enabled, the level will have shout for help until it's beaten.",
+			"value-default": false
+		},
+		{
+			"control": "group",
+			"name": "unlock",
+			"title": "Unlock Settings",
+			"collapse": true,
+            "default-collapsed": false,
+			"children": [
+				{
+					"control": "comboBox",
+					"name": "up",
+					"title": "Top Unlock",
+					"tooltip": "Type of victory needed to unlock the top.",
+					"elements": ["* - None","* - Always Unlocked","* - Any Win","1 - Card Roulette","2 - SMB3 Orb","3 - Offscreen","4 - Keyhole","5 - SMB2 Orb","6 - Warp","7 - SMB3 Star","8 - Goal Tape","9 - Switch Palace","10 - Flagpole","11 - SMW Orb"],
+					"value-default": 2
+				},
+				{
+					"control": "comboBox",
+					"name": "right",
+					"title": "Right Unlock",
+					"tooltip": "Type of victory needed to unlock the right.",
+					"elements": ["* - None","* - Always Unlocked","* - Any Win","1 - Card Roulette","2 - SMB3 Orb","3 - Offscreen","4 - Keyhole","5 - SMB2 Orb","6 - Warp","7 - SMB3 Star","8 - Goal Tape","9 - Switch Palace","10 - Flagpole","11 - SMW Orb"],
+					"value-default": 2
+				},
+				{
+					"control": "comboBox",
+					"name": "down",
+					"title": "Bottom Unlock",
+					"tooltip": "Type of victory needed to unlock the bottom.",
+					"elements": ["* - None","* - Always Unlocked","* - Any Win","1 - Card Roulette","2 - SMB3 Orb","3 - Offscreen","4 - Keyhole","5 - SMB2 Orb","6 - Warp","7 - SMB3 Star","8 - Goal Tape","9 - Switch Palace","10 - Flagpole","11 - SMW Orb"],
+					"value-default": 2
+				},
+				{
+					"control": "comboBox",
+					"name": "left",
+					"title": "Left Unlock",
+					"tooltip": "Type of victory needed to unlock the left.",
+					"elements": ["* - None","* - Always Unlocked","* - Any Win","1 - Card Roulette","2 - SMB3 Orb","3 - Offscreen","4 - Keyhole","5 - SMB2 Orb","6 - Warp","7 - SMB3 Star","8 - Goal Tape","9 - Switch Palace","10 - Flagpole","11 - SMW Orb"],
+					"value-default": 2
+				}
+			]
+		},
+		{
+			"control": "checkBox",
+			"name": "vanishonwin",
+			"title": "Vanish on level completion",
+			"tooltip": "Turn invisible when the level is complete.",
+			"value-default": false
+		},
+		{
+			"control": "group",
+			"name": "..",
+			"title": "Airship Settings",
+			"collapse": true,
+            "default-collapsed": false,
+			"children": [
+				{
+					"control": "checkBox",
+					"name": "airship",
+					"title": "Spawn Airship",
+					"tooltip": "If enabled, the level will spawn an airship (by default 945, can be changed to the contents of the NPC).",
+					"value-default": false
+				},
+				{
+					"control": "levelFile",
+					"name": "airshipFilename",
+					"title": "Airship Level Filename",
+					"tooltip": "Filename of the standalone airship level, for when it's traveling beyond the level it's stationed at. If nothing's given, then it'll use the Level Filename instead.",
+					"value-default": ""
+				},
+				{
+					"control": "lineEdit",
+					"name": "airshipLayer",
+					"title": "Airship Layer",
+					"tooltip": "A layer for the airship to target instead of just going for any level in the section.",
+					"value-default": ""
+				},
+				{
+					"control": "checkBox",
+					"name": "hideselfairship",
+					"title": "Hide when airship spawns",
+					"tooltip": "Make the level tile invisible when it's airship is active.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "group",
+			"name": "thumbnail",
+			"title": "Thumbnail Settings",
+			"collapse": true,
+            "default-collapsed": false,
+			"children": [
+				{
+					"control": "lineEdit",
+					"name": "image",
+					"title": "Level Thumbnail File",
+					"tooltip": "A thumbnail to show for the level.",
+					"value-default": ""
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "scale",
+					"title": "Thumbnail Scale Multiplier",
+					"tooltip": "How much the thumbnail's scale should be multiplied",
+					"value-default": 1,
+					"value-min": 0.001,
+					"value-max": 256,
+					"decimals": 3,
+					"single-step": 0.1
+				},
+				{
+					"control": "spinBox",
+					"type": "int",
+					"name": "offsetx",
+					"title": "Thumbnail X offset",
+					"value-default": 0,
+					"value-min": -10000,
+					"value-max": 10000
+				},
+				{
+					"control": "spinBox",
+					"type": "int",
+					"name": "offsety",
+					"title": "Thumbnail Y offset",
+					"value-default": 0,
+					"value-min": -10000,
+					"value-max": 10000
+				},
+				{
+					"control": "checkBox",
+					"name": "noroot",
+					"title": "Don't use smb3map root",
+					"tooltip": "If enabled, the texture will not check the smb3map root directory for the file.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "group",
+			"name": "layer",
+			"title": "Layer Settings",
+			"collapse": true,
+            "default-collapsed": true,
+			"children": [
+				{
+					"control": "lineEdit",
+					"name": "show",
+					"title": "Reveal Layer",
+					"tooltip": "The layer that'll be shown when the level's complete.",
+					"value-default": ""
+				},
+				{
+					"control": "lineEdit",
+					"name": "hide",
+					"title": "Hide Layer",
+					"tooltip": "The layer that'll be hidden when the level's complete.",
+					"value-default": ""
+				},
+				{
+					"control": "lineEdit",
+					"name": "toggle",
+					"title": "Toggle Layer",
+					"tooltip": "The layer that'll become hidden if it's shown and shown when it's hidden when the level's complete.",
+					"value-default": ""
+				},
+				{
+					"control": "group",
+					"name": "..",
+					"title": "Direction Specific Layer Settings",
+					"collapse": true,
+					"default-collapsed": true,
+					"children": [
+						{
+							"control": "group",
+							"name": "up",
+							"title": "Up",
+							"collapse": true,
+							"default-collapsed": true,
+							"children": [
+								{
+									"control": "lineEdit",
+									"name": "show",
+									"title": "Reveal Layer",
+									"tooltip": "The layer that'll be shown when the victory needed for the upwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "hide",
+									"title": "Hide Layer",
+									"tooltip": "The layer that'll be hidden when the victory needed for the upwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "toggle",
+									"title": "Toggle Layer",
+									"tooltip": "The layer that'll become hidden if it's shown and shown when the victory needed for the upwards direction is met.",
+									"value-default": ""
+								}
+							]
+						},
+						{
+							"control": "group",
+							"name": "down",
+							"title": "Down",
+							"collapse": true,
+							"default-collapsed": true,
+							"children": [
+								{
+									"control": "lineEdit",
+									"name": "show",
+									"title": "Reveal Layer",
+									"tooltip": "The layer that'll be shown when the victory needed for the downwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "hide",
+									"title": "Hide Layer",
+									"tooltip": "The layer that'll be hidden when the victory needed for the downwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "toggle",
+									"title": "Toggle Layer",
+									"tooltip": "The layer that'll become hidden if it's shown and shown when the victory needed for the downwards direction is met.",
+									"value-default": ""
+								}
+							]
+						},
+						{
+							"control": "group",
+							"name": "left",
+							"title": "Left",
+							"collapse": true,
+							"default-collapsed": true,
+							"children": [
+								{
+									"control": "lineEdit",
+									"name": "show",
+									"title": "Reveal Layer",
+									"tooltip": "The layer that'll be shown when the victory needed for the leftwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "hide",
+									"title": "Hide Layer",
+									"tooltip": "The layer that'll be hidden when the victory needed for the leftwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "toggle",
+									"title": "Toggle Layer",
+									"tooltip": "The layer that'll become hidden if it's shown and shown when the victory needed for the leftwards direction is met.",
+									"value-default": ""
+								}
+							]
+						},
+						{
+							"control": "group",
+							"name": "right",
+							"title": "Right",
+							"collapse": true,
+							"default-collapsed": true,
+							"children": [
+								{
+									"control": "lineEdit",
+									"name": "show",
+									"title": "Reveal Layer",
+									"tooltip": "The layer that'll be shown when the victory needed for the rightwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "hide",
+									"title": "Hide Layer",
+									"tooltip": "The layer that'll be hidden when the victory needed for the rightwards direction is met.",
+									"value-default": ""
+								},
+								{
+									"control": "lineEdit",
+									"name": "toggle",
+									"title": "Toggle Layer",
+									"tooltip": "The layer that'll become hidden if it's shown and shown when the victory needed for the rightwards direction is met.",
+									"value-default": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"control": "checkBox",
+					"name": "noSmoke",
+					"title": "Disable smoke transition",
+					"tooltip": "Disables the effect of the layer getting shown/hidden for the first time.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "checkBox",
+		  	"name": "idxsave",
+		  	"title": "Use idx to save",
+			"tooltip": "If enabled, instead of the level filename being used to save to the file, it'll use the idx of this NPC. Alright for toad houses that have the same layout. Will not work correctly if the level turns into an airship.",
+			"value-default": false
+		}
+	]
+}

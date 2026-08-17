@@ -1,0 +1,30 @@
+{
+	"style": "groupbox",
+	"title": "Music Box Settings",
+	"layout": [
+		{
+			"control": "comboBox",
+			"name": "music",
+			"title": "Music",
+			"tooltip": "The music played when this music box is touched.",
+			"elements": ["Don't change","Default","None","SMW Yoshi's Island","SMW Donut Plains","SMW Vanilla Dome","SMW Forest of Illusion","SMW Valley of Bowser","SMW Star Road","SMW Special World","SMB3 Grass Land","SMB3 Desert Land","SMB3 Water Land","SMB3 Giant Land","SMB3 Sky Land","SMB3 Ice Land","SMB3 Pipe Land","SMB3 Dark Land"],
+			"value-default": 0
+		},
+		{
+			"control": "musicFile",
+			"name": "customMusicPath",
+			"title": "Custom Music Path",
+			"tooltip": "Path of the file that will be used instead of the setting above.",
+			"directory": "episode",
+			"directory-relative": "episode",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "event",
+			"title": "Music Event",
+			"tooltip": "The event that triggers this music box.",
+			"value-default": ""
+		}
+	]
+}

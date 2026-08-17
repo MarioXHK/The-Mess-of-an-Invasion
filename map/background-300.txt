@@ -1,0 +1,10 @@
+image = "background-300.png"
+name = "Terrain Top Right Corner 6 (Poison)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=0
+grid-offset-y=0
+grid=32

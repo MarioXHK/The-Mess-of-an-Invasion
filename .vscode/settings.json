@@ -1,0 +1,43 @@
+{
+    "Lua.runtime.plugin": "C:/Users/PC/AppData/Roaming/Code/User/globalStorage/sumneko.lua/addonManager/addons/smbx2-lunalua/module/plugin.lua",
+    "Lua.addonManager.enable": true, // If the addon manager wasn't working, turn this on manually
+    
+    // This field should be set by the addon manager when you install plugins
+    "Lua.workspace.library": [
+        // The directory these definitions are located
+        "C:/Users/PC/AppData/Roaming/Code/User/globalStorage/sumneko.lua/addonManager/addons/smbx2-lunalua/module/library",
+        
+        // The directory lpeg is located (if you're using it)
+        "C:/Users/PC/AppData/Roaming/Code/User/globalStorage/sumneko.lua/addonManager/addons/lpeg/module/library"
+    ],
+    
+    "Lua.type.inferParamType": true, // This might help improve diagnostic information
+    
+    "Lua.runtime.version": "LuaJIT", // The version of lua that LunaLua is based on
+    
+    "Lua.diagnostics.disable": [
+        "missing-fields",
+        "redundant-parameter",
+        "inject-field",
+        "param-type-mismatch",
+        "need-check-nil",
+        "undefined-field",
+        "deprecated"
+    ],
+    "Lua.diagnostics.globals": [
+        "BLOCK_ID",
+        "isThrown",
+        "isHeld"
+    ],
+    "Lua.completion.autoRequire": false,
+    
+    // If you're experiencing errors with casting a number to an integer, you can turn this on. Lua does not make the distinction between
+    // these types during runtime, it is purely for enhanced diagnostics.
+    // "Lua.type.castNumberToInteger": true,
+    
+    // For when something *could* be nil but you know that it won't be.
+    // For example: Misc.resolveFile returns a string or nil, so it will give you a diagnostic error when you try to use the
+    // result as a string without first checking if it's nil. Generally it's good practice to nil-check before using values, but
+    // you can still choose to disable this diagnostic here.
+    // "Lua.type.weakNilCheck": true,
+}

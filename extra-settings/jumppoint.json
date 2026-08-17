@@ -1,0 +1,74 @@
+{
+	"style": "groupbox",
+	"title": "Jump Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"type": "double",
+		  	"name": "jumpspeed",
+		  	"title": "Jump Speed",
+			"tooltip": "What's the Y speed the jump going",
+			"value-default": -5.7,
+			"value-min": -64,
+			"value-max": 64,
+			"decimals": 2
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "jumpheight",
+		  	"title": "Jump Frames",
+			"tooltip": "How many frames will the jump persist before being effected by gravity",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 32
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+		  	"name": "gravity",
+		  	"title": "Jump Gravity",
+			"tooltip": "What's the gravity of the jump",
+			"value-default": 0.4,
+			"value-min": -64,
+			"value-max": 64,
+			"decimals": 3
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+		  	"name": "terminalv",
+		  	"title": "Terminal Velocity",
+			"tooltip": "What's the terminal velocity. Set to 0 for none.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 64,
+			"decimals": 2
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "jumpsound",
+		  	"title": "Jump Sound",
+			"tooltip": "Sound that's made.",
+			"value-default": 1,
+			"value-min": 0,
+			"value-max": 91
+		},
+		{
+			"control": "comboBox",
+			"name": "reqdirection",
+			"title": "Required Direction",
+			"tooltip": "The direction the player needs to be to trigger this block.",
+			"elements": ["Any","Down","Left","Right","Up"],
+			"value-default": 0
+		},
+		{
+			"control": "checkBox",
+			"name": "stack",
+			"title" : "Stack jump",
+			"tooltip": "If true, this jump will trigger even if the previous jumps haven't finished.",
+			"value-default": false
+		}
+	]
+}

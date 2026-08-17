@@ -1,0 +1,4 @@
+image="background-751.png"
+priority = -90
+frames = 1
+framespeed = 8

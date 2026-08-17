@@ -1,0 +1,7 @@
+image = "background-1000.png"
+icon = "background-1000i.png"
+name = "SMB3 HUD Guide"
+group = "Miscellaneous"
+category = "Misc"
+description = "A guide for what part of the SMB3 HUD will block the screen."
+priority = -99

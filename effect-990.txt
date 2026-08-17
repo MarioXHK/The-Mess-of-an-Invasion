@@ -1,0 +1,6 @@
+[1]
+onDeath=DEATH_SMOKE
+yOffset=2
+framestyle=1
+lifetime=118
+priority=BACKGROUND

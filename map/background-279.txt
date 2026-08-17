@@ -1,0 +1,9 @@
+image = "background-279.png"
+name = "Terrain River Right 5 (Ice)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=0
+grid-offset-y=0

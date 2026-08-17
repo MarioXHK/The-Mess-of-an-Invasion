@@ -1,0 +1,7 @@
+image = "background-915.png"
+name = "Cloud"
+group = "Super Mario Bros. 3"
+category = "Cloud"
+priority = -10
+frames=1
+framespeed=16

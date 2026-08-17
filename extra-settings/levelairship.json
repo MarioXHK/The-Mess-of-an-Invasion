@@ -1,0 +1,27 @@
+{
+	"style": "groupbox",
+	"title": "Enemy Tile Settings",
+	"layout": [
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that this tile leads to.",
+			"value-default": ""
+		},
+		{
+			"control": "checkBox",
+		  	"name": "once",
+		  	"title": "Only Once",
+			"tooltip": "If enabled, the enemy will be defeated and not come back.",
+			"value-default": true
+		},
+		{
+			"control": "lineEdit",
+			"name": "airshipLayer",
+			"title": "Airship Layer",
+			"tooltip": "A layer for the airship to target instead of just going for any level in the section.",
+			"value-default": ""
+		}
+	]
+}

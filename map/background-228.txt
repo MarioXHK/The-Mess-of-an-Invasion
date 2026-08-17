@@ -1,0 +1,10 @@
+image = "background-228.png"
+name = "Terrain Middle Right 5 (Ice)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=0
+grid-offset-y=0
+grid=32

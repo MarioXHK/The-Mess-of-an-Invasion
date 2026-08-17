@@ -1,0 +1,9 @@
+image = "background-170.png"
+name = "Cloud Top Right"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=2
+framespeed=16
+grid-offset-x=0
+grid-offset-y=16

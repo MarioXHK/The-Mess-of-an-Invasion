@@ -1,0 +1,20 @@
+{
+	"style": "groupbox",
+	"title": "Starting Animation Settings",
+	"layout": [
+		{
+			"control": "lineEdit",
+			"name": "worldName",
+			"title": "World Name",
+			"tooltip": "What the name should be displayed as.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "event",
+			"title": "Trigger Event",
+			"tooltip": "An event that needs to trigger in the same section for this to activate.",
+			"value-default": ""
+		}
+	]
+}

@@ -1,0 +1,55 @@
+{
+	"style": "groupbox",
+	"title": "Enemy Tile Settings",
+	"layout": [
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that this tile leads to.",
+			"value-default": ""
+		},
+		{
+			"control": "checkBox",
+		  	"name": "once",
+		  	"title": "No immediate respawn",
+			"tooltip": "If enabled, the enemy won't come back immediately once the map refreshes.",
+			"value-default": true
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "respawntime",
+		  	"title": "Respawn Timer",
+			"tooltip": "How many times must the map be loaded before the enemy respawns if no immediate respawn is set to true. Setting it to 0 makes the enemy unable to respawn",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 100
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "steps",
+		  	"title": "Enemy Steps",
+			"tooltip": "How many steps will the enemy take before stopping.",
+			"value-default": 4,
+			"value-min": 0,
+			"value-max": 100
+		},
+		{
+			"control": "checkBox",
+		  	"name": "dontsavepos",
+		  	"title": "Don't save position",
+			"tooltip": "If enabled, the enemy won't have its position saved between levels.",
+			"value-default": false
+		},
+		{
+			"control": "comboBox",
+			"name": "direction",
+			"title": "Starting Direction (Movers)",
+			"tooltip": "The starting direction of the enemy (only applies to enemies with the ismover or followredirectors config)",
+			"elements": ["None","Up","Down","Left","Right","Up-Left","Up-Right","Down-Left","Down-Right","Random Cardinal"],
+			"value-default": 0
+		}
+	]
+}

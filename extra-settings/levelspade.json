@@ -1,0 +1,37 @@
+{
+	"style": "groupbox",
+	"title": "N-Mark Spade Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"type": "int",
+		  	"name": "score",
+		  	"title": "Required Score",
+			"tooltip": "How much score must be achieved to summon the n-spade.",
+			"value-default": 80000,
+			"value-min": 0,
+			"value-max": 10000000
+		},
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that the n-spade will lead to.",
+			"value-default": ""
+		},
+		{
+			"control": "checkBox",
+		  	"name": "once",
+		  	"title": "Only Once",
+			"tooltip": "If enabled, the n-spade will only appear once and never again, even after X more amounts of points is given.",
+			"value-default": true
+		},
+		{
+			"control": "lineEdit",
+			"name": "nlayer",
+			"title": "Specific Layer",
+			"tooltip": "A layer for the n-spade to target instead of just going for any level in the section.",
+			"value-default": ""
+		}
+	]
+}

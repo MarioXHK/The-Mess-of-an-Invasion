@@ -1,0 +1,9 @@
+image = "background-292.png"
+name = "Terrain Middle Right 6 (Poison)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=0
+grid-offset-y=0

@@ -1,0 +1,16 @@
+image = "background-30.png"
+name = "Terrain Top Left 7 (Lava)"
+group = "Super Mario Bros. 3"
+category = "Terrain"
+priority = -90
+frames=1
+framespeed=16
+grid-offset-x=16
+grid-offset-y=16
+
+lightoffsetx = 0
+lightoffsety = 0
+lightradius = 32
+lightbrightness = 0.5
+lightcolor = red
+lightflicker = false

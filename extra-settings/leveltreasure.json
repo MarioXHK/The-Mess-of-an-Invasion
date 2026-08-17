@@ -1,0 +1,27 @@
+{
+	"style": "groupbox",
+	"title": "Treasure Ship Settings",
+	"layout": [
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that the Treasure Ship will lead.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "event",
+			"title": "Trigger Event",
+			"tooltip": "If it's not blank, any level that triggers this event will spawn the treasrue ship instead of it needing it's specific conditions.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "nlayer",
+			"title": "Specific Layer",
+			"tooltip": "A layer for the treasure ship to target instead of just going for any enemy in the section.",
+			"value-default": ""
+		}
+	]
+}

@@ -1,0 +1,27 @@
+{
+	"style": "groupbox",
+	"title": "Level Tile Settings",
+	"layout": [
+		{
+			"control": "levelFile",
+			"name": "levelFilename",
+			"title": "Level Filename",
+			"tooltip": "Filename of the level that this tile leads to.",
+			"value-default": ""
+		},
+		{
+			"control": "lineEdit",
+			"name": "levelTitle",
+			"title": "Level Title",
+			"tooltip": "Title shown when standing on this tile.",
+			"value-default": ""
+		},
+		{
+			"control": "checkBox",
+		  	"name": "once",
+		  	"title": "Only Once",
+			"tooltip": "If enabled, the level cannot be enterable after beaten.",
+			"value-default": true
+		}
+	]
+}

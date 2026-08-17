@@ -1,0 +1,3 @@
+nogravity=true
+nowaterphysics=true
+noblockcollision=true

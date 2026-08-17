@@ -1,0 +1,32 @@
+{
+	"style": "groupbox",
+	"title": "Player Speed Settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"type": "double",
+		  	"name": "speed",
+		  	"title": "Speed",
+			"tooltip": "What the speed value should be set to. (Don't do negative unless you're also doing additive)",
+			"value-default": 4,
+			"value-min": -32,
+			"value-max": 32,
+			"decimals": 3
+		},
+		{
+			"control": "checkBox",
+			"name": "add",
+			"title" : "Additive",
+			"tooltip": "If true, the speed will be added onto the total amount of speed.",
+			"value-default": false
+		},
+		{
+			"control": "comboBox",
+			"name": "reqdirection",
+			"title": "Required Direction",
+			"tooltip": "The direction the player needs to be to trigger this block.",
+			"elements": ["Any","Down","Left","Right","Up"],
+			"value-default": 0
+		}
+	]
+}
