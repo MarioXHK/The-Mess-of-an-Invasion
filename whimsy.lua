@@ -6,6 +6,8 @@ local puppet = require("puppet")
 
 local npcutils = require("npcs/npcutils")
 
+local easing = require("ext/easing")
+
 local shroomIDs = {}
 
 function whimsy.registerActivator(id)
@@ -714,25 +716,25 @@ puppet.registerPuppet{
                     },
                     [7] = {
                         scale = 8,
-                        --transform = "beat",
+                        transform = "beat",
                     },
                 },
             }
         },
-        --beat = {
-        --    easing = "inOutQuad",
-        --    time = 32,
-        --    parts = {
-        --        inner = {
-        --            [1] = {
-        --                scale = 6,
-        --            },
-        --            [2] = {
-        --                scale = 8,
-        --            },
-        --        },
-        --    }
-        --}
+        beat = {
+            easing = "inOutQuad",
+            time = 32,
+            parts = {
+                inner = {
+                    [1] = {
+                        scale = 6,
+                    },
+                    [2] = {
+                        scale = 8,
+                    },
+                },
+            }
+        }
     }
 }
 
@@ -787,9 +789,15 @@ function whimsy.onTickNPC(v)
             data.timer = 0
             data.activated = true
             SFX.play(whimsy.sfx)
+            data.player = data.player or player
             for _,p in ipairs(Player.get()) do
-                Audio.MusicFadeOut(p.section,100)
+                if p.isValid and p.section ~= data.player.section then
+                    p.section = data.player.section
+                    p.x = data.player.x
+                    p.y = data.player.y
+                end
             end
+            Audio.MusicFadeOut(player.section,100)
 
             data.puppet:terminateAnimation("blink")
             for i = 1,4 do
@@ -838,7 +846,7 @@ function whimsy.onTickEndNPC(v)
     local darkradius = config.darkradius or (config.width+config.height)
 
     if data.activated then
-        darkradius = darkradius^(1+data.timer*0.005)
+        darkradius = darkradius+easing.outInBack(data.timer,0,400,224,3)
     else
         data.puppet.y = v.y+math.cos(data.timer/config.framespeed)*config.speed
     end
@@ -886,7 +894,7 @@ function whimsy.onDrawNPC(v)
     local darkradius = config.darkradius or (config.width+config.height)
 
     if data.activated then
-        darkradius = darkradius^(1+data.timer*0.005)
+        darkradius = darkradius+easing.outInBack(data.timer,0,400,224,3)
     end
 
     Graphics.drawCircle{
@@ -895,7 +903,7 @@ function whimsy.onDrawNPC(v)
         sceneCoords = true,
         radius = darkradius,
         priority = whimsy.darkpriority-1,
-        color = Color(whimsy.colors.dark.r,whimsy.colors.dark.g,whimsy.colors.dark.b,whimsy.colors.dark.a/2)
+        color = Color(whimsy.colors.dark.r,whimsy.colors.dark.g,whimsy.colors.dark.b,(whimsy.colors.dark.a/2)*math.clamp(1-math.max(data.timer-192,0)/64))
     }
 end
 
@@ -943,7 +951,9 @@ function whimsy.onNPCCollect(e,v,p)
     if not shroomIDs[v.id] then return end
     if e.cancelled then return end
 
-    v.data.activating = true
+    local data = v.data
+    data.activating = true
+    data.player = p
     e.cancelled = true
 end
 
