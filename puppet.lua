@@ -189,12 +189,21 @@ function puppet.registerPart(settings,id,values)
     if type(part.gfxscale) == "number" then
         part.gfxscale = vector(part.gfxscale,part.gfxscale)
     end
+    
     -- If the gfx scale should multiply instead of replace the regular scale
     ---@type boolean
     part.multiplygfxscale = true
     if type(values.multiplygfxscale) ~= "nil" then
         part.multiplygfxscale = values.multiplygfxscale
     end
+
+    -- Default GFX Scale of the part
+    ---@type Vector2
+    part.offsetScale = values.offsetScale or values.offsetscale or vector(values.offsetScaleX or values.offsetscalex or 1,values.offsetScaleY or values.offsetscalex or 1)
+    if type(part.gfxscale) == "number" then
+        part.offsetScale = vector(part.offsetScale,part.offsetScale)
+    end
+
     -- How many frames does the part have
     ---@type Vector2
     part.frames = values.frames or vector(values.framesX or values.framesx or 1,values.framesY or values.framesy or 1)
@@ -278,20 +287,47 @@ function puppet.registerPart(settings,id,values)
     -- If the part should be centered on its x and y axis
     ---@type boolean
     part.centered = true
+
     if type(values.centered) ~= "nil" then
         part.centered = values.centered
     end
+
+    -- If the part should be a solid color if no texture is provided
+    ---@type boolean
+    part.solidColor = false
+
+    if type(values.solidColor) ~= "nil" then
+        part.solidColor = values.solidColor
+    elseif type(values.solid) ~= "nil" then
+        part.solidColor = values.solid
+    elseif type(values.solidcolor) ~= "nil" then
+        part.solidColor = values.solidcolor
+    end
+
+    -- If the part should render as a circle
+    ---@type boolean
+    part.isCircle = false
+
+    if type(values.isCircle) ~= "nil" then
+        part.isCircle = values.isCircle
+    elseif type(values.iscircle) ~= "nil" then
+        part.isCircle = values.iscircle
+    end
+
     -- If the part should be visible at the start
     ---@type boolean
     part.visible = true
+
     if type(values.visible) ~= "nil" then
         part.visible = values.visible
     elseif type(values.invisible) ~= "nil" then
         part.visible = (not values.invisible)
     end
+
     -- If the part's gfxscale and angle should initially be effected by directions
     ---@type boolean
     part.paper = false
+
     if type(values.paper) ~= "nil" then
         part.paper = values.paper
     elseif type(settings.paper) ~= "nil" then
@@ -301,6 +337,7 @@ function puppet.registerPart(settings,id,values)
     -- If only the part's gfxscale should initially be effected by directions
     ---@type boolean
     part.paperdims = false
+
     if type(values.paperdims) ~= "nil" then
         part.paperdims = values.paperdims
     elseif type(settings.paperdims) ~= "nil" then
@@ -949,12 +986,14 @@ local function animateDoohickey(puppy,animate,animation,data,york,asettings,true
         ease = easing[efunk]
     end
 
-    if type(animation[gotta]) == "table" then
-        if animation[gotta].snap == "start" then
+    local animConfig = animation[gotta]
+
+    if type(animConfig) == "table" then
+        if animConfig.snap == "start" then
             gotta = min
-        elseif animation[gotta].snap == "end" then
+        elseif animConfig.snap == "end" then
             gotta = max
-        elseif not animation[gotta].snap then
+        elseif not animConfig.snap then
             if asettings.easestart then
                 gotta = min
             elseif asettings.easeend then
@@ -968,11 +1007,11 @@ local function animateDoohickey(puppy,animate,animation,data,york,asettings,true
             gotta = max
         end
     end
-    if type(animation[gotta]) == "table" then
-        if type(animation[gotta].easing) == "function" or animation[gotta].easing == "nil" then
-            ease = animation[gotta].easing
-        elseif type(animation[gotta].easing) == "string" then
-            ease = easing[animation[gotta].easing]
+    if type(animConfig) == "table" then
+        if type(animConfig.easing) == "function" or animConfig.easing == "nil" then
+            ease = animConfig.easing
+        elseif type(animConfig.easing) == "string" then
+            ease = easing[animConfig.easing]
         end
     end
 
@@ -1029,6 +1068,12 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
     -- If the part is currently centered
     ---@type boolean
     part.centered = pettings.centered
+    -- If the part is currently a circle
+    ---@type boolean
+    part.isCircle = pettings.isCircle
+    -- If the part can be a solid color
+    ---@type boolean
+    part.solidColor = pettings.solidColor
     -- Parent of the part which is itself a part.
     ---@type string|number|nil
     part.parent = pettings.parent
@@ -1114,6 +1159,10 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
     -- Scale of the part GFX wise
     ---@type Vector2
     part.gfxscale = vector(pettings.gfxscale.x,pettings.gfxscale.y)
+
+    -- Scale of the part's offset
+    ---@type Vector2
+    part.offsetScale = vector(pettings.offsetScale.x,pettings.offsetScale.y)
 
     -- If true, the part will ignore animation rotation
     ---@type boolean
@@ -1202,8 +1251,10 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             --local efunk = asettings.easing
 
                             local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]])
-                            if animation[min].framespeed or animation[min].frameSpeed or animation[min].framespeedx or animation[min].frameSpeedX or animation[min].framespeedy or animation[min].frameSpeedY or
-                            animation[max].framespeed or animation[max].frameSpeed or animation[max].framespeedx or animation[max].frameSpeedX or animation[max].framespeedy or animation[max].frameSpeedY then
+                            local animConfigMin = animation[min]
+                            local animConfigMax = animation[max]
+                            if animConfigMin.framespeed or animConfigMin.frameSpeed or animConfigMin.framespeedx or animConfigMin.frameSpeedX or animConfigMin.framespeedy or animConfigMin.frameSpeedY or
+                            animConfigMax.framespeed or animConfigMax.frameSpeed or animConfigMax.framespeedx or animConfigMax.frameSpeedX or animConfigMax.framespeedy or animConfigMax.frameSpeedY then
                                 addframespeed = true
                                 local mzeron = vector(0,0)
                                 local mzerox = vector(0,0)
@@ -1213,8 +1264,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                     mzerox = vector(deframespeed.x,deframespeed.y)
                                 end
 
-                                local fsmn = animation[min].framespeed or vector(animation[min].framespeedx or animation[min].frameSpeedX or mzeron.x,animation[min].framespeedy or animation[min].frameSpeedY or mzeron.y)
-                                local fsmx = animation[max].framespeed or vector(animation[max].framespeedx or animation[max].frameSpeedX or mzerox.x,animation[max].framespeedy or animation[max].frameSpeedY or mzerox.y)
+                                local fsmn = animConfigMin.framespeed or vector(animConfigMin.framespeedx or animConfigMin.frameSpeedX or mzeron.x,animConfigMin.framespeedy or animConfigMin.frameSpeedY or mzeron.y)
+                                local fsmx = animConfigMax.framespeed or vector(animConfigMax.framespeedx or animConfigMax.frameSpeedX or mzerox.x,animConfigMax.framespeedy or animConfigMax.frameSpeedY or mzerox.y)
                                 local fs = math.lerp(fsmn,fsmx,dist)
 
                                 if setframespeed then
@@ -1434,23 +1485,49 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         -- Dimensions
         ---@type Vector2
         local dims = defaultdims
+
         -- Texture
         ---@type Texture|nil
         local texture = dargs.texture or settings.texture or self.settings.texture
+
         -- Color
         ---@type Color
         local color = dargs.color or Color(self.color.r,self.color.g,self.color.b,self.color.a)
+
         -- Centered
         ---@type boolean
         local center = self.centered
+
         if type(dargs.centered) ~= "nil" then
             center = dargs.centered
         end
+
+        -- Solid Color
+        ---@type boolean
+        local solid = self.solidColor
+
+        if type(dargs.solid) ~= "nil" then
+            solid = dargs.solid
+        elseif type(dargs.solidColor) ~= "nil" then
+            solid = dargs.solidColor
+        end
+
+        -- Circular
+        ---@type boolean
+        local isCircle = self.isCircle
+
+        if type(dargs.isCircle) ~= "nil" then
+            isCircle = dargs.isCircle
+        elseif type(dargs.iscircle) ~= "nil" then
+            isCircle = dargs.iscircle
+        end
+
         -- Use scene coordinates
         ---@type boolean
         local sceneCoords = true
+
         if type(dargs.sceneCoords) ~= "nil" then
-            center = dargs.sceneCoords
+            sceneCoords = dargs.sceneCoords
         end
         -- Paper effects
         ---@type boolean
@@ -1482,14 +1559,18 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         if type(dargs.ignoreanimation) ~= "nil" then
             ignoreanimation = dargs.ignoreanimation
         end
+
         -- Dimensions scale
         ---@type Vector2
         local scale = dargs.scale or self.scale
         scale = vector(scale.x,scale.y)
+
         -- Rendering scale
         ---@type Vector2
         local gfxscale = dargs.gfxscale or self.gfxscale
         gfxscale = vector(gfxscale.x,gfxscale.y)
+        
+
         -- If the GFX scale should multiply the regular scale when rendering
         ---@type boolean
         local mgfxs = self.settings.multiplygfxscale
@@ -1500,9 +1581,16 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         elseif type(settings.multiplygfxscale) ~= "nil" then
             mgfxs = settings.multiplygfxscale
         end
+
+        -- Offset scale
+        ---@type Vector2
+        local offsetScale = dargs.offsetScale or self.offsetScale
+        offsetScale = vector(offsetScale.x,offsetScale.y)
+
         -- Render priority
         ---@type number
         local priority = dargs.priority or self.priority
+
         -- If the rendering priority is independent
         ---@type boolean
         local indiepriority = self.indiepriority
@@ -1556,6 +1644,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                     priority = priority+ref.priority
                     visible = visible and ref.visible
                     direction = ref.direction*direction
+                    offsetScale = offsetScale*ref.offsetScale
                 elseif argsempty then
                     ddata.waitingInLine = true
                     return
@@ -1574,10 +1663,14 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             local scalar = vector(1,1)
             -- Multiply this with gfxscale
             local fattyfatfat = vector(1,1)
+            -- Multiply this with offsetScale
+            local oddscale = vector(1,1)
             -- Multiply this with the direction
             local pirection = vector(1,1)
             -- Add this to pos
             local posession = vector(0,0)
+            -- Add this to offset
+            local offsession = vector(0,0)
 
             local petting = pup.settings
             if petting and not ignoreanimation then
@@ -1591,6 +1684,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                     local asettings = petting.animations[animate.animation]
                     if asettings then
                         -- Checking to see if the settings of the animation have a part ID that matches the part ID of the part.
+
                         ---@type PuppetPartAnimation
                         local animation = asettings.part[self.id]
                         if animation then
@@ -1611,147 +1705,165 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
 
                             local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]])
 
+                            local animConfig = animation[gotta]
+                            local animConfigMin = animation[min]
+                            local animConfigMax = animation[max]
+
                             -- Centered
-                            if type(animation[gotta].centered) ~= "nil" then
-                                center = animation[gotta].centered
+                            if type(animConfig.centered) ~= "nil" then
+                                center = animConfig.centered
+                            end
+
+                            -- Solid Color
+                            if type(animConfig.solid) ~= "nil" then
+                                solid = animConfig.solid
+                            elseif type(animConfig.solidColor) ~= "nil" then
+                                solid = animConfig.solidColor
+                            end
+
+                            -- Circular
+                            if type(animConfig.isCircle) ~= "nil" then
+                                isCircle = animConfig.isCircle
+                            elseif type(animConfig.iscircle) ~= "nil" then
+                                isCircle = animConfig.iscircle
                             end
 
                             -- Paper values
-                            if type(animation[gotta].paper) ~= "nil" then
-                                paper = animation[gotta].paper
+                            if type(animConfig.paper) ~= "nil" then
+                                paper = animConfig.paper
                             end
 
-                            if type(animation[gotta].paperdims) ~= "nil" then
-                                paperdims = animation[gotta].paperdims
+                            if type(animConfig.paperdims) ~= "nil" then
+                                paperdims = animConfig.paperdims
                             end
 
-                            if type(animation[gotta].paperangle) ~= "nil" then
-                                paperangle = animation[gotta].paperangle
+                            if type(animConfig.paperangle) ~= "nil" then
+                                paperangle = animConfig.paperangle
                             end
 
                             -- visibility
-                            if type(animation[gotta].visible) ~= "nil" then
-                                visible = animation[gotta].visible
-                            elseif type(animation[gotta].invisible) ~= "nil" then
-                                visible = (not animation[gotta].invisible)
+                            if type(animConfig.visible) ~= "nil" then
+                                visible = animConfig.visible
+                            elseif type(animConfig.invisible) ~= "nil" then
+                                visible = (not animConfig.invisible)
                             end
 
                             -- Other booleans
-                            if type(animation[gotta].ignorePupDirection) ~= "nil" then
-                                ignorePupDirection = animation[gotta].ignorePupDirection
+                            if type(animConfig.ignorePupDirection) ~= "nil" then
+                                ignorePupDirection = animConfig.ignorePupDirection
                             end
 
-                            if type(animation[gotta].ignoreDirection) ~= "nil" then
-                                ignoreDirection = animation[gotta].ignoreDirection
+                            if type(animConfig.ignoreDirection) ~= "nil" then
+                                ignoreDirection = animConfig.ignoreDirection
                             end
 
-                            if type(animation[gotta].XYFrameSwap) ~= "nil" then
-                                XYFrameSwap = animation[gotta].XYFrameSwap
+                            if type(animConfig.XYFrameSwap) ~= "nil" then
+                                XYFrameSwap = animConfig.XYFrameSwap
                             end
 
-                            if type(animation[gotta].offsetDirection) ~= "nil" then
-                                offsetDirection = animation[gotta].offsetDirection
+                            if type(animConfig.offsetDirection) ~= "nil" then
+                                offsetDirection = animConfig.offsetDirection
                             end
 
                             -- Graphic things
 
-                            if animation[gotta].texture then
-                                texture = animation[gotta].texture
+                            if animConfig.texture then
+                                texture = animConfig.texture
                                 framecalc = true
                             end
 
-                            if animation[gotta].shader then
-                                shader = animation[gotta].shader
+                            if animConfig.shader then
+                                shader = animConfig.shader
                             end
 
-                            if animation[gotta].uniforms then
-                                uniforms = animation[gotta].uniforms
+                            if animConfig.uniforms then
+                                uniforms = animConfig.uniforms
                             end
 
-                            if animation[gotta].attributes then
-                                attributes = animation[gotta].attributes
+                            if animConfig.attributes then
+                                attributes = animConfig.attributes
                             end
 
-                            if animation[gotta].captureBuffer then
-                                captureBuffer = animation[gotta].captureBuffer
+                            if animConfig.captureBuffer then
+                                captureBuffer = animConfig.captureBuffer
                             end
 
                             -- Frame
-                            if animation[gotta].frame then
+                            if animConfig.frame then
                                 framecalc = true
-                                if type(animation[gotta].frame) == "number" then
-                                    frame.y = animation[gotta].frame
+                                if type(animConfig.frame) == "number" then
+                                    frame.y = animConfig.frame
                                 else
-                                    frame = vector(animation[gotta].frame.x,animation[gotta].frame.y)
+                                    frame = vector(animConfig.frame.x,animConfig.frame.y)
                                 end
                             end
 
-                            if animation[gotta].frameX or animation[gotta].framex then
+                            if animConfig.frameX or animConfig.framex then
                                 framecalc = true
-                                frame.x = animation[gotta].frameX or animation[gotta].framex
+                                frame.x = animConfig.frameX or animConfig.framex
                             end
-                            if animation[gotta].frameY or animation[gotta].framey then
+                            if animConfig.frameY or animConfig.framey then
                                 framecalc = true
-                                frame.y = animation[gotta].frameY or animation[gotta].framey
+                                frame.y = animConfig.frameY or animConfig.framey
                             end
 
                             -- GFX dimensions
-                            if animation[gotta].gfxwidth or animation[gotta].sourceWidth then
+                            if animConfig.gfxwidth or animConfig.sourceWidth then
                                 framecalc = true
-                                gfxwidth = animation[gotta].gfxwidth or animation[gotta].sourceWidth
+                                gfxwidth = animConfig.gfxwidth or animConfig.sourceWidth
                             end
-                            if animation[gotta].gfxheight or animation[gotta].sourceHeight then
+                            if animConfig.gfxheight or animConfig.sourceHeight then
                                 framecalc = true
-                                gfxheight = animation[gotta].gfxheight or animation[gotta].sourceHeight
-                            end
-
-                            if animation[gotta].framedims or animation[gotta].framedimsX or animation[gotta].framedimsY then
-                                framecalc = true
-                                framedims = animation[gotta].framedims or vector(animation[gotta].framedimsX or framedims.x,animation[gotta].framedimsY or framedims.y)
+                                gfxheight = animConfig.gfxheight or animConfig.sourceHeight
                             end
 
-                            if animation[gotta].sourceOffset or animation[gotta].sourceOffsetX or animation[gotta].sourceOffsetY then
+                            if animConfig.framedims or animConfig.framedimsX or animConfig.framedimsY then
                                 framecalc = true
-                                sourceOffset = animation[gotta].sourceOffset or vector(animation[gotta].sourceOffsetX or sourceOffset.x,animation[gotta].sourceOffsetY or sourceOffset.y)
+                                framedims = animConfig.framedims or vector(animConfig.framedimsX or framedims.x,animConfig.framedimsY or framedims.y)
                             end
 
-                            if animation[gotta].dims or animation[gotta].dimsx or animation[gotta].dimsy then
+                            if animConfig.sourceOffset or animConfig.sourceOffsetX or animConfig.sourceOffsetY then
+                                framecalc = true
+                                sourceOffset = animConfig.sourceOffset or vector(animConfig.sourceOffsetX or sourceOffset.x,animConfig.sourceOffsetY or sourceOffset.y)
+                            end
+
+                            if animConfig.dims or animConfig.dimsx or animConfig.dimsy then
                                 dimcalc = true
-                                dims = animation[gotta].dims or vector(animation[gotta].dimsx or dims.x,animation[gotta].dimsy or dims.y)
+                                dims = animConfig.dims or vector(animConfig.dimsx or dims.x,animConfig.dimsy or dims.y)
                             end
 
                             local cdist = math.clamp(dist)
 
                             -- Rotation
 
-                            if checkSet(animation[gotta],"rotation") then
-                                rotation = math.lerp(animation[min].rotation or animation[min].angle or rotation,animation[max].rotation or animation[max].angle or rotation,dist)
+                            if checkSet(animConfig,"rotation") then
+                                rotation = math.lerp(animConfigMin.rotation or animConfigMin.angle or rotation,animConfigMax.rotation or animConfigMax.angle or rotation,dist)
                             else
-                                rotary = rotary+math.lerp(animation[min].rotation or animation[min].angle or 0,animation[max].rotation or animation[max].angle or 0,dist)
+                                rotary = rotary+math.lerp(animConfigMin.rotation or animConfigMin.angle or 0,animConfigMax.rotation or animConfigMax.angle or 0,dist)
                             end
 
                             -- Rotation offset
 
-                            if checkSet(animation[gotta],"rotationOffset") then
-                                rotationOffset = math.lerp(animation[min].rotationOffset or animation[min].rotationoffset or rotationOffset,animation[max].rotationOffset or animation[max].rotationoffset or rotationOffset,dist)
+                            if checkSet(animConfig,"rotationOffset") then
+                                rotationOffset = math.lerp(animConfigMin.rotationOffset or animConfigMin.rotationoffset or rotationOffset,animConfigMax.rotationOffset or animConfigMax.rotationoffset or rotationOffset,dist)
                             else
-                                rotaroff = rotaroff+math.lerp(animation[min].rotationOffset or animation[min].rotationoffset or 0,animation[max].rotationOffset or animation[max].rotationoffset or 0,dist)
+                                rotaroff = rotaroff+math.lerp(animConfigMin.rotationOffset or animConfigMin.rotationoffset or 0,animConfigMax.rotationOffset or animConfigMax.rotationoffset or 0,dist)
                             end
 
                             -- Rotation Limit
 
-                            if checkSet(animation[gotta],"rotation") then
-                                rotationlimit = math.lerp(animation[min].rotationlimit or animation[min].angle or rotationlimit,animation[max].rotationlimit or animation[max].angle or rotationlimit,dist)
+                            if checkSet(animConfig,"rotation") then
+                                rotationlimit = math.lerp(animConfigMin.rotationlimit or animConfigMin.angle or rotationlimit,animConfigMax.rotationlimit or animConfigMax.angle or rotationlimit,dist)
                             else
-                                noscope = noscope+math.lerp(animation[min].rotationlimit or animation[min].angle or 0,animation[max].rotationlimit or animation[max].angle or 0,dist)
+                                noscope = noscope+math.lerp(animConfigMin.rotationlimit or animConfigMin.angle or 0,animConfigMax.rotationlimit or animConfigMax.angle or 0,dist)
                             end
 
                             -- Priority
 
-                            if checkSet(animation[gotta],"priority") then
-                                priority = math.lerp(animation[min].priority or animation[min].prior or priority,animation[max].priority or animation[max].prior or priority,dist)
+                            if checkSet(animConfig,"priority") then
+                                priority = math.lerp(animConfigMin.priority or animConfigMin.prior or priority,animConfigMax.priority or animConfigMax.prior or priority,dist)
                             else
-                                prions = prions+math.lerp(animation[min].priority or animation[min].prior or 0,animation[max].priority or animation[max].prior or 0,dist)
+                                prions = prions+math.lerp(animConfigMin.priority or animConfigMin.prior or 0,animConfigMax.priority or animConfigMax.prior or 0,dist)
                             end
 
                             -- Color
@@ -1764,26 +1876,26 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             }
                             local clrmx = clonetable(clrmn)
 
-                            if animation[min].color then
-                                clrmn.r = animation[min].color.r or animation[min].color.red or animation[min].color.R or animation[min].color.Red or clrmn.r
-                                clrmn.g = animation[min].color.g or animation[min].color.green or animation[min].color.G or animation[min].color.Green or clrmn.g
-                                clrmn.b = animation[min].color.b or animation[min].color.blue or animation[min].color.B or animation[min].color.Blue or clrmn.b
-                                clrmn.a = animation[min].color.a or animation[min].color.alpha or animation[min].color.A or animation[min].color.Alpha or clrmn.a
+                            if animConfigMin.color then
+                                clrmn.r = animConfigMin.color.r or animConfigMin.color.red or animConfigMin.color.R or animConfigMin.color.Red or clrmn.r
+                                clrmn.g = animConfigMin.color.g or animConfigMin.color.green or animConfigMin.color.G or animConfigMin.color.Green or clrmn.g
+                                clrmn.b = animConfigMin.color.b or animConfigMin.color.blue or animConfigMin.color.B or animConfigMin.color.Blue or clrmn.b
+                                clrmn.a = animConfigMin.color.a or animConfigMin.color.alpha or animConfigMin.color.A or animConfigMin.color.Alpha or clrmn.a
                             end
-                            clrmn.r = animation[min].RED or animation[min].red or animation[min].Red or animation[min].colorr or animation[min].colorred or animation[min].colorR or animation[min].colorRed or clrmn.r
-                            clrmn.g = animation[min].GREEN or animation[min].green or animation[min].Green or animation[min].colorg or animation[min].colorgreen or animation[min].colorG or animation[min].colorGreen or clrmn.g
-                            clrmn.b = animation[min].BLUE or animation[min].blue or animation[min].Blue or animation[min].colorb or animation[min].colorblue or animation[min].colorB or animation[min].colorBlue or clrmn.b
-                            clrmn.a = animation[min].ALPHA or animation[min].alpha or animation[min].Alpha or animation[min].colora or animation[min].coloralpha or animation[min].colorA or animation[min].colorAlpha or clrmn.a
-                            if animation[max].color then
-                                clrmx.r = animation[max].color.r or animation[max].color.red or animation[max].color.R or animation[max].color.Red or clrmx.r
-                                clrmx.g = animation[max].color.g or animation[max].color.green or animation[max].color.G or animation[max].color.Green or clrmx.g
-                                clrmx.b = animation[max].color.b or animation[max].color.blue or animation[max].color.B or animation[max].color.Blue or clrmx.b
-                                clrmx.a = animation[max].color.a or animation[max].color.alpha or animation[max].color.A or animation[max].color.Alpha or clrmx.a
+                            clrmn.r = animConfigMin.RED or animConfigMin.red or animConfigMin.Red or animConfigMin.colorr or animConfigMin.colorred or animConfigMin.colorR or animConfigMin.colorRed or clrmn.r
+                            clrmn.g = animConfigMin.GREEN or animConfigMin.green or animConfigMin.Green or animConfigMin.colorg or animConfigMin.colorgreen or animConfigMin.colorG or animConfigMin.colorGreen or clrmn.g
+                            clrmn.b = animConfigMin.BLUE or animConfigMin.blue or animConfigMin.Blue or animConfigMin.colorb or animConfigMin.colorblue or animConfigMin.colorB or animConfigMin.colorBlue or clrmn.b
+                            clrmn.a = animConfigMin.ALPHA or animConfigMin.alpha or animConfigMin.Alpha or animConfigMin.colora or animConfigMin.coloralpha or animConfigMin.colorA or animConfigMin.colorAlpha or clrmn.a
+                            if animConfigMax.color then
+                                clrmx.r = animConfigMax.color.r or animConfigMax.color.red or animConfigMax.color.R or animConfigMax.color.Red or clrmx.r
+                                clrmx.g = animConfigMax.color.g or animConfigMax.color.green or animConfigMax.color.G or animConfigMax.color.Green or clrmx.g
+                                clrmx.b = animConfigMax.color.b or animConfigMax.color.blue or animConfigMax.color.B or animConfigMax.color.Blue or clrmx.b
+                                clrmx.a = animConfigMax.color.a or animConfigMax.color.alpha or animConfigMax.color.A or animConfigMax.color.Alpha or clrmx.a
                             end
-                            clrmx.r = animation[max].RED or animation[max].red or animation[max].Red or animation[max].colorr or animation[max].colorred or animation[max].colorR or animation[max].colorRed or clrmx.r
-                            clrmx.g = animation[max].GREEN or animation[max].green or animation[max].Green or animation[max].colorg or animation[max].colorgreen or animation[max].colorG or animation[max].colorGreen or clrmx.g
-                            clrmx.b = animation[max].BLUE or animation[max].blue or animation[max].Blue or animation[max].colorb or animation[max].colorblue or animation[max].colorB or animation[max].colorBlue or clrmx.b
-                            clrmx.a = animation[max].ALPHA or animation[max].alpha or animation[max].Alpha or animation[max].colora or animation[max].coloralpha or animation[max].colorA or animation[max].colorAlpha or clrmx.a
+                            clrmx.r = animConfigMax.RED or animConfigMax.red or animConfigMax.Red or animConfigMax.colorr or animConfigMax.colorred or animConfigMax.colorR or animConfigMax.colorRed or clrmx.r
+                            clrmx.g = animConfigMax.GREEN or animConfigMax.green or animConfigMax.Green or animConfigMax.colorg or animConfigMax.colorgreen or animConfigMax.colorG or animConfigMax.colorGreen or clrmx.g
+                            clrmx.b = animConfigMax.BLUE or animConfigMax.blue or animConfigMax.Blue or animConfigMax.colorb or animConfigMax.colorblue or animConfigMax.colorB or animConfigMax.colorBlue or clrmx.b
+                            clrmx.a = animConfigMax.ALPHA or animConfigMax.alpha or animConfigMax.Alpha or animConfigMax.colora or animConfigMax.coloralpha or animConfigMax.colorA or animConfigMax.colorAlpha or clrmx.a
 
                             local cr = math.clamp(math.lerp(clrmn.r,clrmx.r,dist))
                             local cg = math.clamp(math.lerp(clrmn.g,clrmx.g,dist))
@@ -1795,8 +1907,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             -- Position
 
                             local ps = vector(1,1)
-                            local pcx = checkSet(animation[gotta],"pos") or checkSet(animation[gotta],"position") or checkSet(animation[gotta],"posx") or checkSet(animation[gotta],"posX" or checkSet(animation[gotta],"x"))
-                            local pcy = checkSet(animation[gotta],"pos") or checkSet(animation[gotta],"position") or checkSet(animation[gotta],"posy") or checkSet(animation[gotta],"posY" or checkSet(animation[gotta],"y"))
+                            local pcx = checkSet(animConfig,"pos") or checkSet(animConfig,"position") or checkSet(animConfig,"posx") or checkSet(animConfig,"posX") or checkSet(animConfig,"x")
+                            local pcy = checkSet(animConfig,"pos") or checkSet(animConfig,"position") or checkSet(animConfig,"posy") or checkSet(animConfig,"posY") or checkSet(animConfig,"y")
                             if pcx then
                                 ps.x = pos.x
                             end
@@ -1804,17 +1916,17 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                 ps.y = pos.y
                             end
 
-                            local mnp = vector(animation[min].x or 0,animation[min].y or 0)
-                            if animation[min].pos or animation[min].position then
-                                mnp = animation[min].pos or animation[min].position
+                            local mnp = vector(animConfigMin.x or 0,animConfigMin.y or 0)
+                            if animConfigMin.pos or animConfigMin.position then
+                                mnp = animConfigMin.pos or animConfigMin.position
                             end
-                            local mxp = vector(animation[max].x or 0,animation[max].y or 0)
-                            if animation[max].pos or animation[max].position then
-                                mxp = animation[max].pos or animation[max].position
+                            local mxp = vector(animConfigMax.x or 0,animConfigMax.y or 0)
+                            if animConfigMax.pos or animConfigMax.position then
+                                mxp = animConfigMax.pos or animConfigMax.position
                             end
                             local pp = math.lerp(mnp,mxp,dist)
 
-                            if checkSet(animation[gotta],"pos") or checkSet(animation[gotta],"position") then
+                            if checkSet(animConfig,"pos") or checkSet(animConfig,"position") then
                                 pos = ps
                             elseif pcx then
                                 pos.x = ps.x
@@ -1826,15 +1938,49 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                 posession = posession+pp
                             end
 
+                            -- Offset
+
+                            ps = vector(1,1)
+                            pcx = checkSet(animConfig,"off") or checkSet(animConfig,"offset") or checkSet(animConfig,"offsetx") or checkSet(animConfig,"offsetX") or checkSet(animConfig,"xoffset")
+                            pcy = checkSet(animConfig,"off") or checkSet(animConfig,"offset") or checkSet(animConfig,"offsety") or checkSet(animConfig,"offsetY") or checkSet(animConfig,"yoffset")
+                            if pcx then
+                                ps.x = offset.x
+                            end
+                            if pcy then
+                                ps.y = offset.y
+                            end
+
+                            mnp = vector(animConfigMin.x or 0,animConfigMin.y or 0)
+                            if animConfigMin.off or animConfigMin.offset then
+                                mnp = animConfigMin.off or animConfigMin.offset
+                            end
+                            mxp = vector(animConfigMax.x or 0,animConfigMax.y or 0)
+                            if animConfigMax.off or animConfigMax.offset then
+                                mxp = animConfigMax.off or animConfigMax.offset
+                            end
+                            pp = math.lerp(mnp,mxp,dist)
+
+                            if checkSet(animConfig,"off") or checkSet(animConfig,"offset") then
+                                offset = ps
+                            elseif pcx then
+                                offset.x = ps.x
+                                offsession.y = offsession.y+pp.y
+                            elseif pcy then
+                                offset.y = ps.y
+                                offsession.x = offsession.x+pp.x
+                            else
+                                offsession = offsession+pp
+                            end
+
                             -- Dimensions
 
-                            local mnwh = vector(animation[min].width or width,animation[min].height or height)
-                            if animation[min].dimensions then
-                                mnp = animation[min].dimensions
+                            local mnwh = vector(animConfigMin.width or width,animConfigMin.height or height)
+                            if animConfigMin.dimensions then
+                                mnp = animConfigMin.dimensions
                             end
-                            local mxwh = vector(animation[max].width or width,animation[max].height or height)
-                            if animation[max].dimensions then
-                                mxwh = animation[max].dimensions
+                            local mxwh = vector(animConfigMax.width or width,animConfigMax.height or height)
+                            if animConfigMax.dimensions then
+                                mxwh = animConfigMax.dimensions
                             end
                             local wh = math.lerp(mnwh,mxwh,dist)
                             width = wh.x
@@ -1843,8 +1989,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             -- Scale
 
                             local s = vector(1,1)
-                            local scx = checkSet(animation[gotta],"scale") or checkSet(animation[gotta],"scalex") or checkSet(animation[gotta],"scaleX")
-                            local scy = checkSet(animation[gotta],"scale") or checkSet(animation[gotta],"scaley") or checkSet(animation[gotta],"scaleY")
+                            local scx = checkSet(animConfig,"scale") or checkSet(animConfig,"scalex") or checkSet(animConfig,"scaleX")
+                            local scy = checkSet(animConfig,"scale") or checkSet(animConfig,"scaley") or checkSet(animConfig,"scaleY")
                             if scx then
                                 s.x = scale.x
                             end
@@ -1852,25 +1998,25 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                 s.y = scale.y
                             end
 
-                            local mns = vector(animation[min].scaleX or animation[min].scalex or s.x,animation[min].scaleY or animation[min].scaley or s.y)
-                            if animation[min].scale then
-                                if type(animation[min].scale) == "number" then
-                                    mns = vector(animation[min].scale,animation[min].scale)
+                            local mns = vector(animConfigMin.scaleX or animConfigMin.scalex or s.x,animConfigMin.scaleY or animConfigMin.scaley or s.y)
+                            if animConfigMin.scale then
+                                if type(animConfigMin.scale) == "number" then
+                                    mns = vector(animConfigMin.scale,animConfigMin.scale)
                                 else
-                                    mns = animation[min].scale
+                                    mns = animConfigMin.scale
                                 end
                             end
-                            local mxs = vector(animation[max].scaleX or animation[max].scalex or s.x,animation[max].scaleY or animation[max].scaley or s.y)
-                            if animation[max].scale then
-                                if type(animation[max].scale) == "number" then
-                                    mxs = vector(animation[max].scale,animation[max].scale)
+                            local mxs = vector(animConfigMax.scaleX or animConfigMax.scalex or s.x,animConfigMax.scaleY or animConfigMax.scaley or s.y)
+                            if animConfigMax.scale then
+                                if type(animConfigMax.scale) == "number" then
+                                    mxs = vector(animConfigMax.scale,animConfigMax.scale)
                                 else
-                                    mxs = animation[max].scale
+                                    mxs = animConfigMax.scale
                                 end
                             end
                             local sc = math.lerp(mns,mxs,dist)
 
-                            if checkSet(animation[gotta],"scale") then
+                            if checkSet(animConfig,"scale") then
                                 scale = sc
                             elseif scx then
                                 scale.x = sc.x
@@ -1885,31 +2031,31 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             -- GFX Scale
 
                             s = vector(1,1)
-                            scx = checkSet(animation[gotta],"gfxscale") or checkSet(animation[gotta],"gfxscalex") or checkSet(animation[gotta],"gfxScaleX")
-                            scy = checkSet(animation[gotta],"gfxscale") or checkSet(animation[gotta],"gfxscaley") or checkSet(animation[gotta],"gfxScaleY")
-                            if checkSet(animation[gotta],"gfxscale") then
+                            scx = checkSet(animConfig,"gfxscale") or checkSet(animConfig,"gfxscalex") or checkSet(animConfig,"gfxScaleX")
+                            scy = checkSet(animConfig,"gfxscale") or checkSet(animConfig,"gfxscaley") or checkSet(animConfig,"gfxScaleY")
+                            if checkSet(animConfig,"gfxscale") then
                                 s = gfxscale
                             end
 
-                            local gmns = vector(animation[min].gfxscalex or animation[min].gfxScaleX or s.x,animation[min].gfxscaley or animation[min].gfxScaleY or s.y)
-                            if animation[min].gfxscale then
-                                if type(animation[min].gfxscale) == "number" then
-                                    gmns = vector(animation[min].gfxscale,animation[min].gfxscale)
+                            local gmns = vector(animConfigMin.gfxscalex or animConfigMin.gfxScaleX or s.x,animConfigMin.gfxscaley or animConfigMin.gfxScaleY or s.y)
+                            if animConfigMin.gfxscale then
+                                if type(animConfigMin.gfxscale) == "number" then
+                                    gmns = vector(animConfigMin.gfxscale,animConfigMin.gfxscale)
                                 else
-                                    gmns = animation[min].gfxscale
+                                    gmns = animConfigMin.gfxscale
                                 end
                             end
-                            local gmxs = vector(animation[max].gfxscalex or animation[max].gfxScaleX or s.x,animation[max].gfxscaley or animation[max].gfxScaleY or s.y)
-                            if animation[max].gfxscale then
-                                if type(animation[max].gfxscale) == "number" then
-                                    gmxs = vector(animation[max].gfxscale,animation[max].gfxscale)
+                            local gmxs = vector(animConfigMax.gfxscalex or animConfigMax.gfxScaleX or s.x,animConfigMax.gfxscaley or animConfigMax.gfxScaleY or s.y)
+                            if animConfigMax.gfxscale then
+                                if type(animConfigMax.gfxscale) == "number" then
+                                    gmxs = vector(animConfigMax.gfxscale,animConfigMax.gfxscale)
                                 else
-                                    gmxs = animation[max].gfxscale
+                                    gmxs = animConfigMax.gfxscale
                                 end
                             end
                             local gsc = math.lerp(gmns,gmxs,dist)
 
-                            if checkSet(animation[gotta],"gfxscale") then
+                            if checkSet(animConfig,"gfxscale") then
                                 gfxscale = gsc
                             elseif scx then
                                 gfxscale.x = gsc.x
@@ -1921,35 +2067,82 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                 fattyfatfat = fattyfatfat*gsc
                             end
 
+                            -- Offset Scale
+
+                            s = vector(1,1)
+                            scx = checkSet(animConfig,"offsetscale") or checkSet(animConfig,"offsetScale") or checkSet(animConfig,"offsetscalex") or checkSet(animConfig,"offsetScaleX")
+                            scy = checkSet(animConfig,"offsetscale") or checkSet(animConfig,"offsetScale") or checkSet(animConfig,"offsetscaley") or checkSet(animConfig,"offsetScaleY")
+
+                            if checkSet(animConfig,"offsetscale") or checkSet(animConfig,"offsetScale") then
+                                s = offsetScale
+                            end
+
+                            gmns = vector(animConfigMin.offsetscalex or animConfigMin.offsetScaleX or s.x,animConfigMin.offsetscaley or animConfigMin.offsetScaleY or s.y)
+
+                            local oofscal = animConfigMin.offsetScale or animConfigMin.offsetscale
+
+                            if oofscal then
+                                if type(oofscal) == "number" then
+                                    gmns = vector(oofscal,oofscal)
+                                else
+                                    gmns = oofscal
+                                end
+                            end
+
+                            gmxs = vector(animConfigMax.offsetscalex or animConfigMax.offsetScaleX or s.x,animConfigMax.offsetscaley or animConfigMax.offsetScaleY or s.y)
+
+                            oofscal = animConfigMax.offsetScale or animConfigMax.offsetscale
+
+                            if oofscal then
+                                if type(oofscal) == "number" then
+                                    gmxs = vector(oofscal,oofscal)
+                                else
+                                    gmxs = oofscal
+                                end
+                            end
+                            gsc = math.lerp(gmns,gmxs,dist)
+
+                            if checkSet(animConfig,"offsetscale") or checkSet(animConfig,"offsetScale") then
+                                offsetScale = gsc
+                            elseif scx then
+                                offsetScale.x = gsc.x
+                                oddscale.y = oddscale.y*gsc.y
+                            elseif scy then
+                                offsetScale.y = gsc.y
+                                oddscale.x = oddscale.x*gsc.x
+                            else
+                                oddscale = oddscale*gsc
+                            end
+
                             -- Directions
 
                             s = vector(1,1)
-                            scx = checkSet(animation[gotta],"direction") or checkSet(animation[gotta],"directionX") or checkSet(animation[gotta],"directionx")
-                            scy = checkSet(animation[gotta],"direction") or checkSet(animation[gotta],"directionY") or checkSet(animation[gotta],"directiony")
-                            if checkSet(animation[gotta],"direction") then
+                            scx = checkSet(animConfig,"direction") or checkSet(animConfig,"directionX") or checkSet(animConfig,"directionx")
+                            scy = checkSet(animConfig,"direction") or checkSet(animConfig,"directionY") or checkSet(animConfig,"directiony")
+                            if checkSet(animConfig,"direction") then
                                 s = direction
                             end
 
-                            local mnd = vector(animation[min].directionX or animation[min].directionx or s.x,animation[min].directionY or animation[min].directiony or s.y)
-                            if animation[min].direction then
-                                if type(animation[min].direction) == "number" then
-                                    mnd = vector(animation[min].direction,1)
+                            local mnd = vector(animConfigMin.directionX or animConfigMin.directionx or s.x,animConfigMin.directionY or animConfigMin.directiony or s.y)
+                            if animConfigMin.direction then
+                                if type(animConfigMin.direction) == "number" then
+                                    mnd = vector(animConfigMin.direction,1)
                                 else
-                                    mnd = animation[min].direction
+                                    mnd = animConfigMin.direction
                                 end
                             end
-                            local mxd = vector(animation[max].directionX or animation[max].directionx or s.x,animation[max].directionY or animation[max].directiony or s.y)
-                            if animation[max].direction then
-                                if type(animation[max].direction) == "number" then
-                                    mxd = vector(animation[max].direction,1)
+                            local mxd = vector(animConfigMax.directionX or animConfigMax.directionx or s.x,animConfigMax.directionY or animConfigMax.directiony or s.y)
+                            if animConfigMax.direction then
+                                if type(animConfigMax.direction) == "number" then
+                                    mxd = vector(animConfigMax.direction,1)
                                 else
-                                    mxd = animation[max].direction
+                                    mxd = animConfigMax.direction
                                 end
                             end
                             local dir = math.lerp(mnd,mxd,dist)
                             direction = direction*dir
 
-                            if checkSet(animation[gotta],"direction") then
+                            if checkSet(animConfig,"direction") then
                                 direction = dir
                             elseif scx then
                                 direction.x = dir.x
@@ -1962,43 +2155,43 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             end
 
                             -- Vertex Coords
-                            if vcoords and (animation[min].vertexCoords or animation[max].vertexCoords) then
+                            if vcoords and (animConfigMin.vertexCoords or animConfigMax.vertexCoords) then
                                 for i,coord in ipairs(vcoords) do
                                     local mimin = coord
                                     local mamax = coord
-                                    if animation[min].vertexCoords and animation[min].vertexCoords[i] then
-                                        mimin = animation[min].vertexCoords[i]
+                                    if animConfigMin.vertexCoords and animConfigMin.vertexCoords[i] then
+                                        mimin = animConfigMin.vertexCoords[i]
                                     end
-                                    if animation[max].vertexCoords and animation[max].vertexCoords[i] then
-                                        mamax = animation[max].vertexCoords[i]
+                                    if animConfigMax.vertexCoords and animConfigMax.vertexCoords[i] then
+                                        mamax = animConfigMax.vertexCoords[i]
                                     end
                                     vcoords[i] = math.lerp(mimin,mamax,dist)
                                 end
                             end
                             -- Texture Coords
-                            if tcoords and (animation[min].textureCoords or animation[max].textureCoords) then
+                            if tcoords and (animConfigMin.textureCoords or animConfigMax.textureCoords) then
                                 for i,coord in ipairs(tcoords) do
                                     local mimin = coord
                                     local mamax = coord
-                                    if animation[min].textureCoords and animation[min].textureCoords[i] then
-                                        mimin = animation[min].textureCoords[i]
+                                    if animConfigMin.textureCoords and animConfigMin.textureCoords[i] then
+                                        mimin = animConfigMin.textureCoords[i]
                                     end
-                                    if animation[max].textureCoords and animation[max].textureCoords[i] then
-                                        mamax = animation[max].textureCoords[i]
+                                    if animConfigMax.textureCoords and animConfigMax.textureCoords[i] then
+                                        mamax = animConfigMax.textureCoords[i]
                                     end
                                     tcoords[i] = math.lerp(mimin,mamax,dist)
                                 end
                             end
                             -- Vertex Colors
-                            if vcolors and (animation[min].vertexColors or animation[max].vertexColors) then
+                            if vcolors and (animConfigMin.vertexColors or animConfigMax.vertexColors) then
                                 for i,coord in ipairs(tcoords) do
                                     local mimin = coord
                                     local mamax = coord
-                                    if animation[min].vertexColors and animation[min].vertexColors[i] then
-                                        mimin = animation[min].vertexColors[i]
+                                    if animConfigMin.vertexColors and animConfigMin.vertexColors[i] then
+                                        mimin = animConfigMin.vertexColors[i]
                                     end
-                                    if animation[max].vertexColors and animation[max].vertexColors[i] then
-                                        mamax = animation[max].vertexColors[i]
+                                    if animConfigMax.vertexColors and animConfigMax.vertexColors[i] then
+                                        mamax = animConfigMax.vertexColors[i]
                                     end
                                     vcolors[i] = math.lerp(mimin,mamax,dist)
                                 end
@@ -2008,14 +2201,19 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                 end
             end
 
+            --Text.print(offsetScale,100,80)
+            --Text.print(oddscale,100,100)
+
             rotation = rotation+rotary
             rotationlimit = rotationlimit+noscope
             rotationOffset = rotationOffset+rotaroff
             priority = priority+prions
             scale = scale*scalar
             gfxscale = gfxscale*fattyfatfat
+            offsetScale = offsetScale*oddscale
             direction = direction*pirection
             pos = pos+posession
+            offset = offset+offsession
 
             if not indiepriority then
                 priority = priority+pup.priority
@@ -2119,6 +2317,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             ddata.rotation = rotation
             ddata.priority = priority-self.priority
             ddata.visible = visible
+            ddata.offsetScale = offsetScale
             if pup and not indiepriority then
                 ddata.priority = ddata.priority-pup.priority
             end
@@ -2137,7 +2336,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             offset = offset*direction
         end
 
-        pos = pos+offset
+        pos = pos+offset*offsetScale
 
         --if not self.pivotignorerotation then
         --    pos = pos:rotate(rotation)
@@ -2232,22 +2431,19 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             }
         end
 
-        if not (texture and visible) then return end
+        if not visible then return end
 
-        Graphics.drawBox{
-            texture = texture,
-            x = posx,
-            y = posy,
-            sceneCoords = sceneCoords,
+        if not texture then
+            if solid then
+                texture = nil
+            else
+                return
+            end
+        end
+
+        local glDrew = {sceneCoords = sceneCoords,
             priority = priority,
-            sourceX = dimx,
-            sourceY = dimy,
-            sourceWidth = gfxwidth,
-            sourceHeight = gfxheight,
-            width = rwidth,
-            height = rheight,
-            centered = center,
-            rotation = rotation,
+
             color = color,
             shader = shader,
 ---@diagnostic disable-next-line: assign-type-mismatch
@@ -2259,6 +2455,47 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             attributes = attributes,
             captureBuffer = captureBuffer,
         }
+
+        local boxDrew = {
+            texture = texture,
+            x = posx,
+            y = posy,
+            sourceX = dimx,
+            sourceY = dimy,
+            sourceWidth = gfxwidth,
+            sourceHeight = gfxheight,
+            width = rwidth,
+            height = rheight,
+            centered = center,
+            rotation = rotation,
+        }
+
+        local rs = 0
+        if not center then
+            rs = -(rwidth+rheight)/4
+        end
+        
+        local circleDrew = {
+            texture = texture,
+            x = posx+rs,
+            y = posy+rs,
+            sourceX = dimx,
+            sourceY = dimy,
+            sourceWidth = gfxwidth,
+            sourceHeight = gfxheight,
+            radius = (rwidth+rheight)/4,
+            centered = center,
+            rotation = rotation,
+        }
+
+        if isCircle then
+            Graphics.drawCircle(table.join(glDrew,circleDrew))
+        else
+            Graphics.drawBox(table.join(glDrew,boxDrew))
+        end
+        
+
+        
     end
 
     -- vertexCoords of the part
@@ -2723,14 +2960,20 @@ function puppet.spawnPuppet(args)
         local mom = self.parent
         if self.followparent then
             self:parentPosUpdate()
-            if mom and (mom.isValid == nil or mom.isValid) then
-                if (mom.isHidden or mom.invisible or (mom.despawnTimer and mom.despawnTimer < 0)) then
+            if mom then
+                if (mom.isValid == nil or mom.isValid) then
+                    if (mom.isHidden or mom.invisible or (mom.despawnTimer and mom.despawnTimer < 0)) then
+                        self.isHidden = true
+                        self.parentHidden = true
+                    end
+                    if self.parentHidden and not (mom.isHidden or mom.invisible or (mom.despawnTimer and mom.despawnTimer < 0)) then
+                        self.isHidden = false
+                        self.parentHidden = false
+                    end
+                else
                     self.isHidden = true
-                    self.parentHidden = true
-                end
-                if self.parentHidden and not (mom.isHidden or mom.invisible or (mom.despawnTimer and mom.despawnTimer < 0)) then
-                    self.isHidden = false
-                    self.parentHidden = false
+                    self.isValid = false
+                    return
                 end
             end
         end
@@ -2784,20 +3027,25 @@ function puppet.spawnPuppet(args)
 
                 local gotta, min, max, dist = animateDoohickey(self,animate,animation,bata,york,asettings--[[,truetime,efunk]])
 
-                local rmin = animation[min]
+                local animConfig = animation[gotta]
+                local animConfigMin = animation[min]
+                local animConfigMax = animation[max]
+
+
+                local rmin = animConfigMin
                 if type(rmin) ~= "number" then
-                    rmin = animation[min].rotation or animation[min].angle or animation[min][1] or 0
+                    rmin = animConfigMin.rotation or animConfigMin.angle or animConfigMin[1] or 0
                 end
-                local rmax = animation[max]
+                local rmax = animConfigMax
                 if type(rmax) ~= "number" then
-                    rmax = animation[max].rotation or animation[max].angle or animation[max][1] or 0
+                    rmax = animConfigMax.rotation or animConfigMax.angle or animConfigMax[1] or 0
                 end
 
                 local rot = math.lerp(rmin,rmax,dist)
 
                 local setted = false
                 addme.r = true
-                local rgot = animation[gotta]
+                local rgot = animConfig
                 if type(rgot) ~= "number" then
                     if rgot.set then
                         setme.r = rot
@@ -2828,18 +3076,22 @@ function puppet.spawnPuppet(args)
 
                 local gotta, min, max, dist = animateDoohickey(self,animate,animation,bata,york,asettings--[[,truetime,efunk]])
 
-                local mnp = vector(animation[min].x or 0,animation[min].y or 0)
-                if animation[min].pos then
-                    mnp = animation[min].pos
+                local animConfig = animation[gotta]
+                local animConfigMin = animation[min]
+                local animConfigMax = animation[max]
+
+                local mnp = vector(animConfigMin.x or 0,animConfigMin.y or 0)
+                if animConfigMin.pos then
+                    mnp = animConfigMin.pos
                 end
-                local mxp = vector(animation[max].x or 0,animation[max].y or 0)
-                if animation[max].pos then
-                    mxp = animation[max].pos
+                local mxp = vector(animConfigMax.x or 0,animConfigMax.y or 0)
+                if animConfigMax.pos then
+                    mxp = animConfigMax.pos
                 end
                 local pp = math.lerp(mnp,mxp,dist)
 
                 local setted = false
-                local mgp = animation[gotta]
+                local mgp = animConfig
                 if mgp.set then
                     setme.o.x = mgp.x or setme.o.x
                     setme.o.y = mgp.y or setme.o.y
@@ -2874,17 +3126,22 @@ function puppet.spawnPuppet(args)
 
                 local gotta, min, max, dist = animateDoohickey(self,animate,animation,bata,york,asettings--[[,truetime,efunk]])
 
-                local mnp = vector(animation[min].x or 0,animation[min].y or 0)
-                if animation[min].pos then
-                    mnp = animation[min].pos
+                local animConfig = animation[gotta]
+                local animConfigMin = animation[min]
+                local animConfigMax = animation[max]
+
+
+                local mnp = vector(animConfigMin.x or 0,animConfigMin.y or 0)
+                if animConfigMin.pos then
+                    mnp = animConfigMin.pos
                 end
-                local mxp = vector(animation[max].x or 0,animation[max].y or 0)
-                if animation[max].pos then
-                    mxp = animation[max].pos
+                local mxp = vector(animConfigMax.x or 0,animConfigMax.y or 0)
+                if animConfigMax.pos then
+                    mxp = animConfigMax.pos
                 end
                 local pp = math.lerp(mnp,mxp,dist)
                 local setted = false
-                local mgp = animation[gotta]
+                local mgp = animConfig
                 if mgp.set then
                     setme.p.x = mgp.x or setme.p.x
                     setme.p.y = mgp.y or setme.p.y
@@ -2909,29 +3166,33 @@ function puppet.spawnPuppet(args)
 
                 local gotta, min, max, dist = animateDoohickey(self,animate,animation,bata,york,asettings--[[,truetime,efunk]])
 
-                local mnp = animation[min]
+                local animConfig = animation[gotta]
+                local animConfigMin = animation[min]
+                local animConfigMax = animation[max]
+
+                local mnp = animConfigMin
                 if type(mnp) == "number" then
                     mnp = vector(mnp,1)
                 else
-                    mnp = vector(animation[min].x or 1,animation[min].y or 1)
-                    if animation[min].pos then
-                        mnp = animation[min].pos
+                    mnp = vector(animConfigMin.x or 1,animConfigMin.y or 1)
+                    if animConfigMin.pos then
+                        mnp = animConfigMin.pos
                     end
                 end
                 
-                local mxp = animation[max]
+                local mxp = animConfigMax
                 if type(mxp) == "number" then
                     mxp = vector(mxp,1)
                 else
-                    mxp = vector(animation[max].x or 1,animation[max].y or 1)
-                    if animation[max].pos then
-                        mxp = animation[max].pos
+                    mxp = vector(animConfigMax.x or 1,animConfigMax.y or 1)
+                    if animConfigMax.pos then
+                        mxp = animConfigMax.pos
                     end
                 end
 
                 local pp = math.lerp(mnp,mxp,dist)
                 local setted = false
-                local mgp = animation[gotta]
+                local mgp = animConfig
                 if type(mgp) ~= "number" then
                     if mgp.set then
                         setme.d.x = mgp.x or setme.d.x
@@ -2958,19 +3219,23 @@ function puppet.spawnPuppet(args)
 
                 local gotta, min, max, dist = animateDoohickey(self,animate,animation,bata,york,asettings--[[,truetime,efunk]])
 
-                local rmin = animation[min]
+                local animConfig = animation[gotta]
+                local animConfigMin = animation[min]
+                local animConfigMax = animation[max]
+
+                local rmin = animConfigMin
                 if type(rmin) ~= "number" then
-                    rmin = animation[min].priority or animation[min].prior or animation[min][1] or 0
+                    rmin = animConfigMin.priority or animConfigMin.prior or animConfigMin[1] or 0
                 end
-                local rmax = animation[max]
+                local rmax = animConfigMax
                 if type(rmax) ~= "number" then
-                    rmax = animation[max].priority or animation[max].prior or animation[max][1] or 0
+                    rmax = animConfigMax.priority or animConfigMax.prior or animConfigMax[1] or 0
                 end
 
                 local setted = false
                 local rot = math.lerp(rmin,rmax,dist)
                 addme.y = true
-                local rgot = animation[gotta]
+                local rgot = animConfig
                 if type(rgot) ~= "number" then
                     if rgot.set then
                         setme.y = rot
