@@ -531,6 +531,7 @@ ID:3;X:-199072;Y:-200032;W:32;H:32;
 ID:3;X:-201600;Y:-200160;W:32;H:32;
 ID:3;X:-201632;Y:-200160;W:32;H:32;
 ID:3;X:-201664;Y:-200160;W:32;H:32;
+ID:5;X:-199680;Y:-200224;W:32;H:32;CN:-1;IV:1;
 BLOCK_END
 BGO
 ID:7;X:-199936;Y:-200192;
@@ -929,7 +930,7 @@ ID:403;X:-159680;Y:-160116;D:-1;MG:"I don't think I can eat another bite of this
 ID:403;X:-159680;Y:-160116;D:-1;MG:"Hey\, thanks. I wasn't gonna finish that anyway.";FD:1;LR:"kirbfull";
 ID:198;X:-200336;Y:-200192;D:-1;MG:"Please be careful\, the road ahead is dangerous.";FD:1;NM:1;LR:"pretoad";
 ID:7;X:-200896;Y:-200160;D:-1;MG:"I'm homeless";FD:1;NM:1;LR:"pretoad";
-ID:1000;X:-199744;Y:-200256;D:1;
+ID:1000;X:-199776;Y:-200416;D:1;LR:"shroom";
 ID:94;X:-200192;Y:-200150;D:1;MG:"Why are we suddenly underground and what is happening to these houses?!";FD:1;NM:1;LR:"thetoad";
 ID:94;X:-200192;Y:-200150;D:1;MG:"The mushroom kingdom is not one big mineshaft! What the heck is going on?";FD:1;NM:1;LR:"postoad";
 ID:75;X:-199459;Y:-200118;D:-1;MG:"<size 4><tremble>MY HOUSE!!!</tremble></size>";FD:1;NM:1;LR:"thetoad";
@@ -966,9 +967,10 @@ LR:"house2";
 LR:"pretoad";
 LR:"thetoad";
 LR:"postoad";
+LR:"shroom";
 LAYERS_END
 EVENTS_CLASSIC
-ET:"Level - Start";LH:["intelligent enough","it2","V","kirbfull","thetoad","postoad"];LS:["pretoad"];DS:1;AS:0;AX:0;AY:0;
+ET:"Level - Start";LH:["intelligent enough","it2","V","kirbfull","thetoad","postoad","shroom"];LS:["pretoad"];DS:1;AS:0;AX:0;AY:0;
 ET:"P Switch - Start";AS:0;AX:0;AY:0;
 ET:"P Switch - End";AS:0;AX:0;AY:0;
 ET:"Spawn Princess";SD:17;TE:"Stop Spawn";TD:15;AS:0;AX:0;AY:0;
