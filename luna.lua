@@ -5,6 +5,8 @@ local dialogue = require("littleDialogue")
 map.levelFilename = "world.lvlx"
 map.introFilename = "level0.lvlx"
 
+map.introwarp = 4
+
 -- Paper Mario style
 dialogue.registerStyle("pm",{
     textColor = Color.white,

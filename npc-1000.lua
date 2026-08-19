@@ -96,7 +96,8 @@ local drugsSettings = {
 	--lightcolor = Color.white,
 
 	-- Custom properties below
-	blinkchance = 1
+	blinkchance = 1,
+	darkradius = 48,
 }
 
 npcManager.setNpcSettings(drugsSettings)

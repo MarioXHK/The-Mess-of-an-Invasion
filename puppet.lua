@@ -273,6 +273,14 @@ function puppet.registerPart(settings,id,values)
         part.gfxheight = part.gfxheight or  0
     end
 
+    if values.radius then
+        part.width = values.radius*2
+        part.height = values.radius*2
+    elseif values.diameter then
+        part.width = values.diameter
+        part.height = values.diameter
+    end
+
     -- Offset of the source
     ---@type Vector2
     part.sourceOffset = values.sourceOffset or vector(values.sourceOffsetX or values.sourceX or 0,values.sourceOffsetY or values.sourceY or 0)
@@ -869,11 +877,12 @@ end
 ---@param york table<integer,number>
 ---@param truetime number|nil
 ---@param efunk any|nil
+---@param pork PuppetPart|nil
 ---@return number gotta
 ---@return number min
 ---@return number max
 ---@return number dist
-local function animateDoohickey(puppy,animate,animation,data,york,asettings,truetime,efunk)
+local function animateDoohickey(puppy,animate,animation,data,york,asettings,truetime,efunk,pork)
     local dist = 0
     local min = 0
     local max = 0
@@ -902,6 +911,9 @@ local function animateDoohickey(puppy,animate,animation,data,york,asettings,true
         end
         if animation[ttime].stop --[[or animation[ttime].finish]] or animation[ttime].terminate then
             adata.stopped = true
+            if animation[ttime].stop == "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" then
+                SFX.play(1)
+            end
             if animation[ttime].terminate then
                 adata.terminate = true
                 if animation[ttime].terminatefunction then
@@ -1027,6 +1039,10 @@ local function animateDoohickey(puppy,animate,animation,data,york,asettings,true
     end
 
     dist = ease(dist,0,1,1)
+
+    --if pork and dist == 0 then
+    --    Text.print(dist,puppy.x+pork.x-camera.x,puppy.y+pork.y-camera.y)
+    --end
 
     return gotta,min,max,dist
 end
@@ -1250,7 +1266,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             local york = asettings.times[self.id]
                             --local efunk = asettings.easing
 
-                            local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]])
+                            local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]],nil,nil,self)
                             local animConfigMin = animation[min]
                             local animConfigMax = animation[max]
                             if animConfigMin.framespeed or animConfigMin.frameSpeed or animConfigMin.framespeedx or animConfigMin.frameSpeedX or animConfigMin.framespeedy or animConfigMin.frameSpeedY or
@@ -1393,6 +1409,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         -- Render height
         ---@type number
         local height = dargs.height or self.height or settings.height or self.settings.height
+        -- Render radius (only for circles)
+        local radius
         -- Frame width
         ---@type number
         local gfxwidth = dargs.gfxwidth or dargs.sourceWidth or dargs.width or settings.gfxwidth or settings.width or self.settings.gfxwidth or width
@@ -1635,11 +1653,20 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                 if mama.data._draw.initialized then
                     local ref = mama.data._draw
                     ddata.waitingInLine = false
-                    afterscale = ref.scale
+                    ddata.beforescale = scale
                     scale = scale*ref.scale
+                    ddata.afterscale = ref.scale
                     pos = pos*ref.scale
                     pos.x = pos.x+ref.pos.x
                     pos.y = pos.y+ref.pos.y
+
+                    ddata.mompos = ref.pos
+                    ddata.momrotation = ref.rotation
+
+                    --pos = pos*ref.scale
+                    --if ref.afterscale then
+                    --    pos = pos/ref.afterscale
+                    --end
                     rotation = rotation+ref.rotation
                     priority = priority+ref.priority
                     visible = visible and ref.visible
@@ -1703,7 +1730,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             local york = asettings.times[self.id]
                             --local efunk = asettings.easing
 
-                            local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]])
+                            local gotta, min, max, dist = animateDoohickey(pup,animate,animation,pbdata,york,asettings--[[,truetime,efunk]],nil,nil,self)
 
                             local animConfig = animation[gotta]
                             local animConfigMin = animation[min]
@@ -1950,11 +1977,17 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                                 ps.y = offset.y
                             end
 
-                            mnp = vector(animConfigMin.x or 0,animConfigMin.y or 0)
+                            local oxm = animConfigMin.offsetx or animConfigMin.offsetX or animConfigMin.xoffset or 0
+                            local oym = animConfigMin.offsety or animConfigMin.offsetY or animConfigMin.yoffset or 0
+
+                            local oxx = animConfigMax.offsetx or animConfigMax.offsetX or animConfigMax.xoffset or 0
+                            local oyx = animConfigMax.offsety or animConfigMax.offsetY or animConfigMax.yoffset or 0
+
+                            mnp = vector(oxm,oym)
                             if animConfigMin.off or animConfigMin.offset then
                                 mnp = animConfigMin.off or animConfigMin.offset
                             end
-                            mxp = vector(animConfigMax.x or 0,animConfigMax.y or 0)
+                            mxp = vector(oxx,oyx)
                             if animConfigMax.off or animConfigMax.offset then
                                 mxp = animConfigMax.off or animConfigMax.offset
                             end
@@ -1978,9 +2011,23 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                             if animConfigMin.dimensions then
                                 mnp = animConfigMin.dimensions
                             end
+                            if animConfigMin.radius or animConfigMin.diameter then
+                                local radiation = animConfigMin.radius or animConfigMin.diameter
+                                if radiation == animConfigMin.radius then
+                                    radiation = radiation*2
+                                end
+                                mnwh = vector(radiation,radiation)
+                            end
                             local mxwh = vector(animConfigMax.width or width,animConfigMax.height or height)
                             if animConfigMax.dimensions then
                                 mxwh = animConfigMax.dimensions
+                            end
+                            if animConfigMax.radius or animConfigMax.diameter then
+                                local radiation = animConfigMax.radius or animConfigMax.diameter
+                                if radiation == animConfigMax.radius then
+                                    radiation = radiation*2
+                                end
+                                mxwh = vector(radiation,radiation)
                             end
                             local wh = math.lerp(mnwh,mxwh,dist)
                             width = wh.x
@@ -2310,9 +2357,13 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         end
 
         if argsempty then
+            if ddata.mompos then
+                pos = pos - ddata.mompos
+                pos = pos:rotate(ddata.momrotation) + ddata.mompos
+            end
             self.pos = pos
             ddata.initialized = true
-            ddata.pos = vector(pos.x,pos.y):rotate(rotation)
+            ddata.pos = vector(pos.x,pos.y)--:rotate(rotation)
             ddata.scale = scale
             ddata.rotation = rotation
             ddata.priority = priority-self.priority
@@ -2400,6 +2451,9 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             posy = pos.y
         end
         rotation = (rotation % rotationlimit) + rotationOffset
+
+        radius = radius or (rwidth+rheight)/4
+
         if paper or paperangle then
             rotation = rotation*dir.x*dir.y
         end
@@ -2431,6 +2485,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             }
         end
 
+
+        -- FINALLY, IT'S TIME TO DRAW THE DARN PART AFTER ALL THIS MATH!
         if not visible then return end
 
         if not texture then
@@ -2472,7 +2528,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
 
         local rs = 0
         if not center then
-            rs = -(rwidth+rheight)/4
+            rs = -radius
         end
         
         local circleDrew = {
@@ -2483,7 +2539,7 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             sourceY = dimy,
             sourceWidth = gfxwidth,
             sourceHeight = gfxheight,
-            radius = (rwidth+rheight)/4,
+            radius = radius,
             centered = center,
             rotation = rotation,
         }
@@ -2493,9 +2549,6 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         else
             Graphics.drawBox(table.join(glDrew,boxDrew))
         end
-        
-
-        
     end
 
     -- vertexCoords of the part
@@ -2685,9 +2738,19 @@ function puppet.spawnPuppet(args)
     ---@param offset number|nil time offset of the animation in animation ticks.
     ---@param speed number|nil The speed multiplier of the animation
     function pal:setAnimation(animation,index,offset,speed)
+
+        if not animation then
+            error("No animation provided for setAnimation for puppet id \""..tostring(self.id).."\"")
+        end
+
         index = index or 0
         offset = offset or 0
         speed = speed or 1
+
+        if not self.settings.animations[animation] then
+            error("No animation ("..tostring(animation)..") found for puppet id \""..tostring(self.id).."\"")
+        end
+
         self.animations[index] = {}
         ---@class PuppetAnimation
         local anime = self.animations[index]
