@@ -12,8 +12,8 @@ local drugsSettings = {
 	gfxwidth = 32,
 	gfxheight = 32,
 	--Hitbox size. Bottom-center-bound to sprite size.
-	width = 32,
-	height = 32,
+	width = 64,
+	height = 64,
 	--Sprite offset from hitbox for adjusting hitbox anchor on sprite.
 	gfxoffsetx = 0,
 	gfxoffsety = 0,
