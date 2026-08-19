@@ -20,6 +20,35 @@ puppet.puppets = {}
 
 puppet.root = "puppet/"
 
+-- Returns if something is currently visible on the specified camera.
+---@param x number
+---@param y number
+---@param width number
+---@param height number
+---@param buffer number|nil
+---@param centered boolean|nil if the coords are from a centered point
+---@param cam Camera|nil
+---@return boolean
+local function visibleFunc(x, y, width, height, buffer, centered, cam)
+    buffer = buffer or 32
+    if centered then
+        x = x-width/2
+        y = y-height/2
+    end
+    cam = cam or camera
+	if x+width+buffer < cam.x then
+		return false
+	elseif x-buffer > cam.x+cam.width then
+		return false
+	elseif y+height+buffer < cam.y then
+		return false
+	elseif y-buffer > cam.y+cam.height then
+		return false
+	else
+		return true
+	end
+end
+
 -- Attempts to clone a table without referencing any of its values, even nested table values. Returns the table and an additional table of all the index values. if it's NOT a table then it'll return as itself
 ---@param tab table?
 ---@return table
@@ -2449,10 +2478,11 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
             end
             posx = pos.x
             posy = pos.y
+            radius = radius or (rwidth+rheight)/4
         end
         rotation = (rotation % rotationlimit) + rotationOffset
 
-        radius = radius or (rwidth+rheight)/4
+        radius = radius or (width*s.x+height*s.y)/4
 
         if paper or paperangle then
             rotation = rotation*dir.x*dir.y
@@ -2486,9 +2516,23 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
         end
 
 
-        -- FINALLY, IT'S TIME TO DRAW THE DARN PART AFTER ALL THIS MATH!
+        -- Last checks before actually rendering
+
+        -- Is the part functionally visible?
         if not visible then return end
 
+        -- Is the part visible on screen?
+        local isVisible = false
+        for _,c in ipairs(Camera.get()) do
+            if visibleFunc(pos.x,pos.y,width*s.x,height*s.y,nil,center,c) then
+                isVisible = true
+                break
+            end
+        end
+
+        if not isVisible then return end
+
+        -- Does the part have a texture? If not, is it still allowed to render as a solid color?
         if not texture then
             if solid then
                 texture = nil
@@ -2496,6 +2540,8 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
                 return
             end
         end
+
+        -- FINALLY, IT'S TIME TO DRAW THE DARN PART AFTER ALL THIS MATH!
 
         local glDrew = {sceneCoords = sceneCoords,
             priority = priority,
@@ -2528,13 +2574,13 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
 
         local rs = 0
         if not center then
-            rs = -radius
+            rs = -(radius or rs)
         end
-        
+
         local circleDrew = {
             texture = texture,
-            x = posx+rs,
-            y = posy+rs,
+            x = (posx or 0)+rs,
+            y = (posy or 0)+rs,
             sourceX = dimx,
             sourceY = dimy,
             sourceWidth = gfxwidth,
@@ -2546,8 +2592,10 @@ function puppet.spawnPart(pal,partname,pettings,pidx)
 
         if isCircle then
             Graphics.drawCircle(table.join(glDrew,circleDrew))
-        else
+        elseif (not tcoords) or #tcoords <= 0 then
             Graphics.drawBox(table.join(glDrew,boxDrew))
+        else
+            Graphics.gldraw(glDrew)
         end
     end
 

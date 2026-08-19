@@ -3,6 +3,9 @@ local handycam = require("handycam")
 local easing = require("ext/easing")
 local actors = require("actors")
 local dialogue = require("littleDialogue")
+local whimsy = require("whimsy")
+
+whimsy.music = 7
 
 local introScene = cutscenePal.newScene("hiimdaisy")
 
@@ -101,3 +104,7 @@ function onPostEventDirect(event)
         introScene:start()
     end
 end
+
+--function onDraw()
+--    Text.print(player.sectionObj.music,100,100)
+--end

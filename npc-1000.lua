@@ -98,6 +98,8 @@ local drugsSettings = {
 	-- Custom properties below
 	blinkchance = 1,
 	darkradius = 48,
+
+	puppet = "whimsyshroom",
 }
 
 npcManager.setNpcSettings(drugsSettings)
