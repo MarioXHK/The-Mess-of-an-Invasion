@@ -761,6 +761,8 @@ function whimsy.onTickNPC(v)
 		data.initialized = true
         data.activating = false
         data.activated = false
+        data.ppos = {}
+        data.player = nil
 		data.puppet = puppet.spawn{
 			id = "whimsyshroom",
 			parent = v
@@ -791,10 +793,13 @@ function whimsy.onTickNPC(v)
             SFX.play(whimsy.sfx)
             data.player = data.player or player
             for _,p in ipairs(Player.get()) do
-                if p.isValid and p.section ~= data.player.section then
-                    p.section = data.player.section
-                    p.x = data.player.x
-                    p.y = data.player.y
+                if p.isValid then
+                    if p.section ~= data.player.section then
+                        p.section = data.player.section
+                        p.x = data.player.x
+                        p.y = data.player.y
+                    end
+                    data.ppos[_] = vector(p.centerX,p.centerY)
                 end
             end
             Audio.MusicFadeOut(player.section,100)
@@ -819,7 +824,27 @@ function whimsy.onTickNPC(v)
         data.timer = data.timer + 1
 
         if data.timer >= lunatime.toTicks(4) then
+            for _,p in ipairs(Player.get()) do
+                if p.isValid then
+                    if p.forcedState == FORCEDSTATE_INVISIBLE then
+                        p.forcedState = FORCEDSTATE_NONE
+                    end
+                    p.speedX = 0
+                    p.speedY = 0
+                end
+            end
             v:kill(HARM_TYPE_VANISH)
+        else
+            for _,p in ipairs(Player.get()) do
+                if p.isValid then
+                    p.forcedState = FORCEDSTATE_INVISIBLE
+                    if data.ppos[_] then
+                        local larp = math.lerp(data.ppos[_],v.center,math.clamp(data.timer/lunatime.toTicks(4)))
+                        p.x = (larp.x-p.width/2) + p.width*(1-_)*1.5
+                        p.y = larp.y-p.height/2
+                    end
+                end
+            end
         end
 
         return
