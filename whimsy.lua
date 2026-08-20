@@ -16,9 +16,17 @@ local sporeIDs = {}
 ---@type string
 whimsy.startEvent = "Whimsy - Start"
 
+-- An event that will always trigger when collecting a shroom
+---@type string
+whimsy.beginEvent = "Whimsy - Begin"
+
 -- The event that triggets when whimsy stops
 ---@type string
 whimsy.stopEvent = "Whimsy - Stop"
+
+-- An event that will always trigger when collecting a spore
+---@type string
+whimsy.endEvent = "Whimsy - End"
 
 -- Mapped table of events that stop the whimsy screen effects
 ---@type table<string,boolean>
@@ -918,6 +926,7 @@ puppet.registerPuppet{
         pointin = {
             easestart = true,
             easing = "outQuad",
+            time = 32,
             parts = {
                 {
                     [0] = {
@@ -1605,6 +1614,11 @@ function whimsy.onNPCCollect(e,v,p)
             data.activating = true
             data.player = p
             trySFX(whimsy.getsfx)
+        end
+        if shroomIDs[v.id] then
+            triggerEvent(whimsy.beginEvent)
+        else
+            triggerEvent(whimsy.endEvent)
         end
     end
 end

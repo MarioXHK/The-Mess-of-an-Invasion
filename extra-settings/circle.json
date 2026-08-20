@@ -1,0 +1,833 @@
+{
+	"style": "groupbox",
+	"title": "Circle settings",
+	"layout": [
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "radius",
+			"title" : "Radius",
+			"tooltip": "Radius of the circle.",
+			"value-default": 128,
+			"value-min": 1,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "step",
+			"title" : "Precision",
+			"tooltip": "Precision of the circle. How many blocks will be used to generate each corner of this circle (times 2 if it isn't hollow)",
+			"value-default": 8,
+			"value-min": 1,
+			"value-max": 256
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "speed",
+			"title" : "Speed",
+			"value-default": 0,
+			"value-min": -65536,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "rotation",
+			"title" : "Starting rotation",
+			"tooltip": "The rotation the block starts at",
+			"value-default": 0,
+			"value-min": -360,
+			"value-max": 360
+		},
+		{
+			"control": "group",
+			"name": "block",
+			"title": "Rendering Block settings",
+			"collapse": true,
+            "default-collapsed": false,
+			"children": [
+				{
+					"control": "checkBox",
+					"name": "allow",
+					"title": "Render circle using blocks",
+					"tooltip": "If switched off, it'll only be the texture (if applicable)",
+					"value-default": true
+				},
+				{
+					"control": "itemSelect",
+					"type": "block",
+					"name": "id",
+					"title" : "Surface block",
+					"tooltip": "Block that should be rendered as the surface",
+					"value-default": 84
+				},
+				{
+					"control": "itemSelect",
+					"type": "block",
+					"name": "nid",
+					"title" : "Block underneath",
+					"tooltip": "Block that should be rendered under the surface",
+					"value-default": 87
+				},
+				{
+					"control": "spinBox",
+					"type": "int",
+					"name": "depth",
+					"title" : "Render depth limit",
+					"tooltip": "",
+					"value-default": 0,
+					"value-min": 0,
+					"value-max": 16384
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "space",
+					"title" : "Ground block space",
+					"tooltip": "",
+					"value-default": 9.0,
+					"value-min": 0,
+					"value-max": 256
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "priority",
+					"title" : "Render Priority",
+					"tooltip": "The priority of the texture that's rendered",
+					"value-default": -66,
+					"value-min": -100,
+					"value-max": 100
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "rotation",
+					"title" : "Rotation offset (Surface)",
+					"tooltip": "The rotation the blocks will be on the surface",
+					"value-default": 0,
+					"value-min": 0,
+					"value-max": 360
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "rotation2",
+					"title" : "Rotation offset (Ground)",
+					"tooltip": "The rotation the blocks will be in the ground",
+					"value-default": 0,
+					"value-min": 0,
+					"value-max": 360
+				},
+				{
+					"control": "checkBox",
+					"name": "usewidth",
+					"title": "Use width as dominant (Surface)",
+					"tooltip": "If switched on, the width will be what guides how many blocks are rendered on the surface.",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "usewidth2",
+					"title": "Use width as dominant (Ground)",
+					"tooltip": "If switched on, the width will be what guides how many blocks are rendered in the ground.",
+					"value-default": false
+				},
+				{
+					"control": "group",
+					"name": "..",
+					"title": "Source settings",
+					"children": [
+						{
+							"control": "spinBox",
+							"type": "double",
+							"name": "gx",
+							"title" : "Source Scale X",
+							"tooltip": "How much of the texture will be chopped off in rendering.",
+							"value-default": 32,
+							"value-min": -256,
+							"value-max": 256
+						},
+						{
+							"control": "spinBox",
+							"type": "double",
+							"name": "gy",
+							"title" : "Source Scale Y",
+							"tooltip": "How much of the texture will be chopped off in rendering.",
+							"value-default": 32,
+							"value-min": -256,
+							"value-max": 256
+						},
+						{
+							"control": "spinBox",
+							"type": "int",
+							"name": "gfxoffsetx",
+							"title" : "Source Offset X",
+							"tooltip": "How much the source X is offset on",
+							"value-default": 0,
+							"value-min": -1024,
+							"value-max": 1024
+						},
+						{
+							"control": "spinBox",
+							"type": "int",
+							"name": "gfxoffsety",
+							"title" : "Source Offset Y",
+							"tooltip": "How much the source Y is offset on",
+							"value-default": 0,
+							"value-min": -1024,
+							"value-max": 1024
+						}
+					]
+				},
+				{
+					"control": "checkBox",
+					"name": "exrender",
+					"title": "Render non-colliding blocks",
+					"tooltip": "If switched on, blocks will render all around the circle even if they don't have collision",
+					"value-default": false
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "inflate",
+					"title" : "Inflation",
+					"tooltip": "How much the blocks should reach out",
+					"value-default": 0,
+					"value-min": -2048,
+					"value-max": 2048
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "thickness",
+					"title" : "Thickness",
+					"tooltip": "How much the blocks should be crammed together side to side (This gets exponentially thicker. Be careful with the highest possible value as it could crash your game!)",
+					"value-default": 0,
+					"value-min": -3600,
+					"value-max": 359.9
+				}
+			]
+		},
+		{
+			"control": "group",
+			"name": "..",
+			"title": "Image settings",
+			"collapse": true,
+            "default-collapsed": true,
+			"children": [
+				{
+					"control": "lineEdit",
+					"name": "image",
+					"title": "Texture",
+					"tooltip": "The path of the image that will be rendered",
+					"value-default": ""
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "priority",
+					"title" : "Render Priority",
+					"tooltip": "The priority of the texture that's rendered",
+					"value-default": -67,
+					"value-min": -100,
+					"value-max": 100,
+					"decimals": 2
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "scalex",
+					"title" : "Render X Scale",
+					"tooltip": "The texture's X scale",
+					"value-default": 1,
+					"value-min": -2048,
+					"value-max": 2048,
+					"decimals": 2
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "scaley",
+					"title" : "Render Y Scale",
+					"tooltip": "The texture's Y scale",
+					"value-default": 1,
+					"value-min": -2048,
+					"value-max": 2048,
+					"decimals": 2
+				},
+				{
+					"control": "group",
+					"name": "..",
+					"title": "Source settings",
+					"children": [
+						{
+							"control": "spinBox",
+							"type": "double",
+							"name": "gx",
+							"title" : "Source Scale X",
+							"tooltip": "How much of the texture will be chopped off in rendering.",
+							"value-default": 32,
+							"value-min": -256,
+							"value-max": 256,
+							"decimals": 3
+						},
+						{
+							"control": "spinBox",
+							"type": "double",
+							"name": "gy",
+							"title" : "Source Scale Y",
+							"tooltip": "How much of the texture will be chopped off in rendering.",
+							"value-default": 32,
+							"value-min": -256,
+							"value-max": 256,
+							"decimals": 3
+						},
+						{
+							"control": "spinBox",
+							"type": "int",
+							"name": "gfxoffsetx",
+							"title" : "Source Offset X",
+							"tooltip": "How much the source X is offset on",
+							"value-default": 0,
+							"value-min": -1024,
+							"value-max": 1024
+						},
+						{
+							"control": "spinBox",
+							"type": "int",
+							"name": "gfxoffsety",
+							"title" : "Source Offset Y",
+							"tooltip": "How much the source Y is offset on",
+							"value-default": 0,
+							"value-min": -1024,
+							"value-max": 1024
+						}
+					]
+				}
+			]
+		},
+		{
+			"control": "group",
+			"name": "..",
+			"title": "Tilt Settings",
+			"collapse": true,
+            "default-collapsed": true,
+			"children": [
+				{
+					"control": "checkBox",
+					"name": "tilt",
+					"title": "Tilt",
+					"tooltip": "If switched on then it'll allow the rotation to be altered by whatever's standing on it.",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "ignorenpc",
+					"title": "Ignore NPCs",
+					"tooltip": "If enabled npcs won't effect the tilt.",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "ignoreplayer",
+					"title": "Ignore players",
+					"tooltip": "If enabled players won't effect the tilt.",
+					"value-default": false
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "tv",
+					"title" : "Terminal Velocity",
+					"tooltip": "what's the max speed the circle can achieve via tilt?",
+					"value-default": 1,
+					"value-min": 0,
+					"value-max": 65536,
+					"decimals": 2
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "friction",
+					"title" : "Friction",
+					"tooltip": "How fast will the circle stop spinning after tilting?",
+					"value-default": 1,
+					"value-min": 0,
+					"value-max": 65536,
+					"decimals": 2
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "sensitivity",
+					"title" : "Looseness",
+					"tooltip": "The more loose it is, the easier it is for things to tilt it.",
+					"value-default": 1,
+					"value-min": 0.1,
+					"value-max": 65536
+				}
+				
+			]
+		},
+		{
+			"control": "group",
+			"name": "..",
+			"title": "Collision Settings",
+					"children": [
+				{
+					"control": "checkBox",
+					"name": "xy",
+					"title": "Corner Upper Left",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "wy",
+					"title": "Corner Upper Right",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "xh",
+					"title": "Corner Lower Left",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "wh",
+					"title": "Corner Lower Right",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "semisolid",
+					"title": "Upper Semisolid",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "hollow",
+					"title": "Hollow",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "invert",
+					"title": "Inverted Circle",
+					"tooltip": "Inverts the collision so it's round on the inside instead of the outside",
+					"value-default": false
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "cx",
+					"title" : "Ellipse X Scale",
+					"tooltip": "The collision's X scale",
+					"value-default": 10,
+					"value-min": 0,
+					"value-max": 256,
+					"decimals": 2
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "cy",
+					"title" : "Ellipse Y Scale",
+					"tooltip": "The collision's Y scale",
+					"value-default": 10,
+					"value-min": 0,
+					"value-max": 256,
+					"decimals": 2
+				},
+				{
+					"control": "checkBox",
+					"name": "flp",
+					"title": "Fill (Container) NPCs ignore requirements",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "listGroup",
+			"name": "contentList",
+            "collapse": true,
+            "default-collapsed": false,
+			"title": "Contents",
+			"children": [
+                {
+                    "control": "itemSelect",
+                    "name": "id",
+                    "title": "NPC",
+                    "type": "npc",
+                    "tooltip": "The NPC that'll circle the circle.",
+                    "value-default": 0
+                },
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "angle",
+					"title" : "Starting rotation",
+					"tooltip": "The rotation the npc spawns",
+					"value-default": 0,
+					"value-min": -360,
+					"value-max": 360
+				},
+				{
+					"control": "combobox",
+					"name": "direction",
+					"title": "Direction",
+					"tooltip": "Direction of the npc when spawned.",
+					"elements": ["Left", "Random", "Right"],
+					"value-default": 0
+				},
+				{
+					"control": "checkBox",
+					"name": "dontmove",
+					"title" : "Don't Move",
+					"tooltip": "If true, the NPC spawns won't move from it's starting rotation (unless the circle's also rotating.)",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "ignoremove",
+					"title" : "Ignore Circle Movement",
+					"tooltip": "If true, the NPC will ignore the circle's movement. Good for flying NPCs.",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "ignorecircle",
+					"title" : "Ignore Lack of Circle",
+					"tooltip": "If true, the NPC won't turn or fall off if it reaches the edge and just float mid-air",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "bumpnpcs",
+					"title" : "Bump into other NPCs",
+					"tooltip": "If true, the NPC will bump into other NPCs along the cicle. (Might get stuck tho :()",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "bumpwalls",
+					"title" : "Bump off of walls",
+					"tooltip": "If true, the NPC will bump off of other non-circle walls.",
+					"value-default": false
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "height",
+					"title" : "Extra height",
+					"tooltip": "added height when spawning. (good for flying types)",
+					"value-default": 0,
+					"value-min": -65536,
+					"value-max": 65536
+				},
+				{
+					"control": "checkBox",
+					"name": "tilt",
+					"title" : "Effect tilt",
+					"tooltip": "If true, the NPC will effect the tilt of the circle if applicable.",
+					"value-default": false
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "speedmultiplier",
+					"title" : "Speed Multiplier",
+					"tooltip": "How much the enemies speed is multiplied.",
+					"value-default": 1,
+					"value-min": -1024,
+					"value-max": 1024,
+					"decimals": 2
+				},
+				{
+                    "control": "group",
+                    "collapse": true,
+                    "default-collapsed": true,
+                    "name": "extra",
+                    "title": "Basegame Data",
+                    "children": [
+                        {
+                            "control": "checkBox",
+                            "name": "friendly",
+                            "title" : "Friendly",
+                            "tooltip": "If true, the NPC spawns as friendly.",
+                            "value-default": false
+                        },
+                        {
+                            "control": "lineEdit",
+                            "name": "noMoreObjInLayer",
+                            "title": "Layer is Empty Event",
+                            "tooltip": "Event to trigger when the layer is empty.",
+                            "value-default": ""
+                        },
+                        {
+                            "control": "lineEdit",
+                            "name": "deathEventName",
+                            "title": "Death Event",
+                            "tooltip": "Event to trigger when the spawned NPC dies.",
+                            "value-default": ""
+                        },
+                        {
+                            "control": "lineEdit",
+                            "name": "talkEventName",
+                            "title": "Talk Event",
+                            "tooltip": "Event to trigger when the NPC is talked to.",
+                            "value-default": ""
+                        },
+						{
+                            "control": "multiLineEdit",
+                            "name": "msg",
+                            "title": "Message",
+                            "tooltip": "Message of the spawned NPC.",
+                            "value-default": ""
+                        },
+						{
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai1",
+                            "title" : "Ai1",
+                            "tooltip": "Ai1 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai2",
+                            "title" : "Ai2",
+                            "tooltip": "Ai2 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai3",
+                            "title" : "Ai3",
+                            "tooltip": "Ai3 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai4",
+                            "title" : "Ai4",
+                            "tooltip": "Ai4 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai5",
+                            "title" : "Ai5",
+                            "tooltip": "Ai5 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "spinBox",
+                            "type": "int",
+                            "name": "ai6",
+                            "title" : "Ai6",
+                            "tooltip": "Ai6 field of the spawned NPC.",
+                            "value-default": 0,
+                            "value-min": -99999,
+                            "value-max": 99999
+                        },
+                        {
+                            "control": "lineEdit",
+                            "name": "attachedLayerName",
+                            "title": "Attached Layer Name",
+                            "tooltip": "Attached Layer to spawn the NPC with. (If you know what you're doing, all hell will break loose)",
+                            "value-default": ""
+                        }
+                    ]
+                },
+				{
+					"control": "checkBox",
+					"name": "speedx",
+					"title" : "Ignore speedX effects",
+					"tooltip": "If true any layers that is attached to the NPC (or anyone interested in the speedX of the NPC) will see it as 0.",
+					"value-default": false
+				},
+				{
+					"control": "checkBox",
+					"name": "speedy",
+					"title" : "Ignore speedY effects",
+					"tooltip": "If true any layers that is attached to the NPC (or anyone interested in the speedX of the NPC) will see it as not changing.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "listGroup",
+			"name": "events",
+            "collapse": true,
+            "default-collapsed": false,
+			"collapse": true,
+            "default-collapsed": true,
+			"title": "Rotation events",
+			"children": [
+				{
+					"control": "lineEdit",
+					"name": "name",
+					"title": "Event Name",
+					"tooltip": "The name of the event to trigger this rotation.",
+					"value-default": ""
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "speed",
+					"title" : "Speed of rotation",
+					"tooltip": "How much the angular momentum should be set",
+					"value-default": 0,
+					"value-min": -10000,
+					"value-max": 10000,
+					"decimals": 2
+				},
+				{
+					"control": "checkBox",
+					"name": "add",
+					"title" : "Additive",
+					"tooltip": "If true, the event will add instead of set.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "jank",
+			"title" : "Jank Limit",
+			"tooltip": "How steep can a slope be before it's considered jank and is turned into a solid block because of it (0 is 'I paid for ALL the slopes', 1 is a 'larger than 45 degree angle? No thank you.')",
+			"value-default": 0.4,
+			"value-min": 0,
+			"value-max": 2,
+			"decimals": 4
+		},
+		{
+			"control": "checkBox",
+			"name": "squeeze",
+			"title" : "Align to other blocks",
+			"tooltip": "When true, the circle will attempt to align and snap with other blocks near it as to prevent many bugs. It also removes the blocks that are inside of blocks. If you're moving a bunch of these at the same time and experiencing lag, you should disable this. A known issue is that if a circle is moving through blocks a lot some of the blocks that make it up go off-center a bit and get screwed up. You should disable this if the circle isn't going to overlap with any other blocks.",
+			"value-default": true
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "cframes",
+			"title" : "Calculation Frames",
+			"tooltip": "How many frames to calculate the above if true. You can lower this if it's on something that's either constantly moving or not moving at all or raise it to account for more moving parts in a level. (but more frames = more lag)",
+			"value-default": 2,
+			"value-min": 1,
+			"value-max": 16
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "id",
+			"title" : "Lineguider ID",
+			"tooltip": "The ID of the lineguider that's going to follow the motion of this circle.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "sid",
+			"title" : "Sending Link ID",
+			"tooltip": "The ID of other circles that will copy this circle's rotation. Keep at 0 for no linking.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "sspeed",
+			"title" : "Sending multiplier",
+			"value-default": 1,
+			"value-min": -65536,
+			"value-max": 65536,
+			"decimals": 3
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "rid",
+			"title" : "Recieving Link ID",
+			"tooltip": "The ID of the circle that this circle will copy it's movement from. Keep at 0 for no linking.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "rspeed",
+			"title" : "Recieving multiplier",
+			"value-default": 1,
+			"value-min": -65536,
+			"value-max": 65536,
+			"decimals": 3
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "internet",
+			"title" : "Entangled ID",
+			"tooltip": "The ID of a link that every circle under said ID will share speed. Keep at 0 for no free wifi anywhere you go.",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 65536
+		},
+		{
+			"control": "spinBox",
+			"type": "double",
+			"name": "bandwidth",
+			"title" : "Entanglement Influence/Multiplier",
+			"tooltip": "How much influence does this circle have on the connection (base is 100)",
+			"value-default": 100,
+			"value-min": -65536,
+			"value-max": 65536,
+			"decimals": 3
+		},
+		{
+			"control": "checkBox",
+			"name": "crush",
+			"title": "Cruel Crushing",
+			"tooltip": "When a circle is moving, it will try and push the player out of the way to prevent it from crushing into any blocks ahead of it. Enabling this will not allow these checks to happen.",
+			"value-default": false
+		},
+		{
+			"control": "checkBox",
+			"name": "unslope",
+			"title": "Deslopify",
+			"tooltip": "Instead of slope blocks, the circle will use full blocks. 'Why would you ever want this???'",
+			"value-default": false
+		},
+		{
+			"control": "checkBox",
+			"name": "debug",
+			"title": "Debug Mode",
+			"tooltip": "nerds only",
+			"value-default": false
+		}
+	]
+}

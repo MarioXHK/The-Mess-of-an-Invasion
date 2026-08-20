@@ -49,3 +49,11 @@ dialogue.registerStyle("pm",{
 })
 
 dialogue.defaultStyleName = "pm"
+
+function onTick()
+    for _,v in NPC.iterate() do
+        if v.forcedState == NPCFORCEDSTATE_BLOCK_RISE then
+            v.direction = 1
+        end
+    end
+end

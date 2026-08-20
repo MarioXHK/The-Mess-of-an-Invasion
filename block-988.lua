@@ -10,7 +10,9 @@ local fakeSettings = {
 	id = blockID,
 	--Frameloop-related
 	frames = 1,
-	framespeed = 8,
+	framespeed = 8, --# frames between frame change
+	ceilingslope = -1,
+	semisolid = false,
 	circleblock = true,
 }
 

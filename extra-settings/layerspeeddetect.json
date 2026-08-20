@@ -1,0 +1,137 @@
+{
+	"style": "groupbox",
+	"title": "Controller Settings",
+	"layout": [
+		{
+			"control" : "combobox",
+			"name" : "typo",
+			"title" : "Detect",
+			"tooltip": "Which kind of object should be searched for?.",
+			"elements" : ["Block", "Background Objects", "NPCs", "Water/Quicksand","All Warps","Warp Entrances","Warp Exits","All Objects"],
+			"value-default" : 0
+		},
+		{
+			"control": "lineEdit",
+			"name": "layer",
+			"title": "Layer",
+			"tooltip": "The layer to detect for. Leave blank to detect for any layer.",
+			"value-default": ""
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "id",
+			"title" : "Specific ID",
+			"tooltip": "The ID of the thing that should be checked. 0 means no checking (should be 1-1000 for BGOs and NPCs, 1-2000 for blocks, nothing for warps, and for fluids water with odd numbers, quicksand with even numbers.)",
+			"value-default": 0,
+			"value-min": 0,
+			"value-max": 2000
+		},
+		{
+			"control": "group",
+			"collapse": true,
+            "default-collapsed": false,
+			"name": "..",
+			"title": "Speed Settings",
+					"children": [
+				{
+					"control": "checkBox",
+					"name": "doX",
+					"title": "Change horizontal speed",
+					"value-default": true
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "speedX",
+					"title" : "Horizontal speed",
+					"value-default": 0,
+					"value-min": -65536,
+					"value-max": 65536
+				},
+				{
+					"control": "checkBox",
+					"name": "doY",
+					"title": "Change vertical speed",
+					"value-default": true
+				},
+				{
+					"control": "spinBox",
+					"type": "double",
+					"name": "speedY",
+					"title" : "Vertical speed",
+					"value-default": 0,
+					"value-min": -65536,
+					"value-max": 65536
+				},
+				{
+					"control": "checkBox",
+					"name": "addme",
+					"title": "Add my speed",
+					"tooltip": "If enabled and the block is on a moving layer, the block will add it's own speed along with the changed speed.",
+					"value-default": false
+				}
+			]
+		},
+		{
+			"control": "group",
+			"collapse": true,
+            "default-collapsed": true,
+			"name": "..",
+			"title": "Collision Settings",
+					"children": [
+				{
+					"control": "checkBox",
+					"name": "up",
+					"title": "Check if going up",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "down",
+					"title": "Check if going down",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "left",
+					"title": "Check if going left",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "right",
+					"title": "Check if going right",
+					"value-default": true
+				},
+				{
+					"control": "checkBox",
+					"name": "correct",
+					"title": "Correct position",
+					"tooltip": "While this is true the block will attempt to align the position of the block to where it's supposed to be when colliding.",
+					"value-default": true
+				}
+			]
+		},
+		{
+			"control": "checkBox",
+			"name": "blind",
+			"title": "Ignore hidden",
+			"value-default": true
+		},
+		{
+			"control": "checkBox",
+			"name": "destroy",
+			"title": "One use",
+			"tooltip": "If set to true, the moment the block detects a valid object, it destroys itself.",
+			"value-default": false
+		},
+		{
+			"control": "lineEdit",
+			"name": "event",
+			"title": "Event Trigger",
+			"tooltip": "An event to trigger if this block has been triggered",
+			"value-default": ""
+		}
+	]
+}

@@ -1,0 +1,28 @@
+{
+	"style" : "groupbox",
+	"title" : "Multi Coin Block Settings",
+	"layout": [	
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "maxCoins",
+			"title": "Number of Coins",
+			"tooltip": "Max number of coins to contain.",
+			"value-default": 10,
+			"value-min": 1,
+			"value-max": 99,
+			"single-step": 1
+		},
+		{
+			"control": "spinBox",
+			"type": "int",
+			"name": "blockTime",
+			"title": "Block Timer",
+			"tooltip": "The time upon hitting the block before it runs out, in ticks.",
+			"value-default": 320,
+			"value-min": 1,
+			"value-max": 1000,
+			"single-step": 1
+		}
+		]
+}

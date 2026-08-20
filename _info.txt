@@ -1,0 +1,45 @@
+Scripts by MarioXHK
+
+This is pretty buggy and janky, so there's your caution tape. I tried to make it as least buggy/janky as possible, and made as many settings as I could, so.... uhh..... I tried, k?
+Try and use these optimally and sparingly. Circular platforms might be fun, but they can be a hassle if you have too many
+
+
+Custom Circular Block Config Settings:
+circleblock (all of the blocks) (Default: true) - Validates that the block is apart of a circle and should ignore eachother when checking for various things.
+speedreduction (Default: 10) - How much to divide the speed by. It's set since without it the speed would just be way too high
+basebandwidth (Default: 100) - How much influence is in an entangled circular platform by default.
+
+Custom Circling NPC Config Settings:
+iscircler (Default: true) - Validates that the NPC is meant for circling
+isfloater (Default: false) - If set to true, the NPC won't turn into it's base NPC when it's on the edge of the platform
+basenpc (Default: various) - The base NPC that the circling NPC's based off of. If set to 0 then the NPC will die if it's no longer on the circle.
+ihandleframes (Default: false) - If true, custom code will handle the animation of this NPC
+ihandlespeed (Default: false) - If true, custom code will handle how the NPC moves around the platform
+gfxoffsetr (Default: 0) - How much the GFX is rotationally offset
+priority (Default: -45) - The priority of the NPC
+npctexture (Default: npc-id.png) - The texture of the NPC
+
+Transforming NPCs
+transformid - If this is set to something, the rotating NPC will transform into the NPC that has this ID when 
+neededreason - The reason required to transform properly. Set to -1 for any reason other than lava
+neededreason2 - neededreason's brother
+neededreason3 - neededreason's sister
+
+
+Following rotation NPCs
+speed (Default: various) - The max speed the NPC will be able to make while running along a circular platform before falling behind
+stillframes (Default: varies) - How many idle animation frames are there (can be set to 0)
+walkframes (Default: variable) - How many walk animation frames are there above the idle ones
+framespeedmultiplier (Default: var) - How much the framespeed is multiplied when the NPC is in motion
+
+YI Ravens
+timermin (Default: 64) - The minimum amount of time the raven can be moving
+timermax (Default: 321) - The maximum amount of time the raven can be moving
+turntimermin (Default: 16) - The minimum amount of time a raven can take turning
+turntimermax (Default: 64) - The maximum amount of time a raven can take turning
+
+Stretch
+walkframes (Default: 2) - How many frames of it's frames are actually used for walking
+walktimer (Default: 160) - How long the stretch will be out before hiding
+resttimer (Default: 64) - The amount of time the stretch will stay in the ground
+hidemultiplier (Default: 2) - How much faster the stretch is underground than overground

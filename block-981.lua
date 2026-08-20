@@ -12,6 +12,7 @@ local fakeSettings = {
 	frames = 1,
 	framespeed = 8,
 	circleblock = true,
+	passthrough = true,
 }
 
 blockManager.setBlockSettings(fakeSettings)

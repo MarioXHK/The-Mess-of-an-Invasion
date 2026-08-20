@@ -11,6 +11,7 @@ local fakeSettings = {
 	--Frameloop-related
 	frames = 1,
 	framespeed = 8,
+	semisolid = true,
 	circleblock = true,
 }
 
