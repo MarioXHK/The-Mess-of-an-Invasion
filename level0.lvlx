@@ -532,6 +532,7 @@ ID:3;X:-201600;Y:-200160;W:32;H:32;
 ID:3;X:-201632;Y:-200160;W:32;H:32;
 ID:3;X:-201664;Y:-200160;W:32;H:32;
 ID:5;X:-199680;Y:-200224;W:32;H:32;CN:-1;IV:1;
+ID:5;X:-200064;Y:-200672;W:32;H:32;CN:-1;IV:1;EH:"shroom";
 BLOCK_END
 BGO
 ID:7;X:-199936;Y:-200192;
@@ -930,7 +931,7 @@ ID:403;X:-159680;Y:-160116;D:-1;MG:"I don't think I can eat another bite of this
 ID:403;X:-159680;Y:-160116;D:-1;MG:"Hey\, thanks. I wasn't gonna finish that anyway.";FD:1;LR:"kirbfull";
 ID:198;X:-200336;Y:-200192;D:-1;MG:"Please be careful\, the road ahead is dangerous.";FD:1;NM:1;LR:"pretoad";
 ID:7;X:-200896;Y:-200160;D:-1;MG:"I'm homeless";FD:1;NM:1;LR:"pretoad";
-ID:1000;X:-199776;Y:-200416;D:1;LR:"shroom";
+ID:1000;X:-199776;Y:-200256;D:1;GE:1;GT:1;GD:1;GM:20;LR:"shroom";
 ID:94;X:-200192;Y:-200150;D:1;MG:"Why are we suddenly underground and what is happening to these houses?!";FD:1;NM:1;LR:"thetoad";
 ID:94;X:-200192;Y:-200150;D:1;MG:"The mushroom kingdom is not one big mineshaft! What the heck is going on?";FD:1;NM:1;LR:"postoad";
 ID:75;X:-199459;Y:-200118;D:-1;MG:"<size 4><tremble>MY HOUSE!!!</tremble></size>";FD:1;NM:1;LR:"thetoad";
@@ -939,7 +940,7 @@ ID:198;X:-200336;Y:-200192;D:-1;MG:"Seriously be careful\, crazy things like thi
 ID:198;X:-200336;Y:-200192;D:-1;MG:"The road ahead is only going to get more unpredictable from here...";FD:1;NM:1;LR:"postoad";
 ID:94;X:-201376;Y:-200150;D:1;MG:"Crazy what things are happening here. Might wanna brace yourself for more.";FD:1;NM:1;LR:"thetoad";
 ID:94;X:-201376;Y:-200150;D:1;MG:"Those shrooms are very strange. Luckily their power can be contained in those seeds.";FD:1;NM:1;LR:"postoad";
-ID:196;X:-200064;Y:-200256;D:-1;LR:"thetoad";
+ID:196;X:-200064;Y:-200256;D:-1;GE:1;GT:1;GD:3;GM:60;LR:"thetoad";
 ID:7;X:-200896;Y:-200160;D:-1;MG:"Heh...I'm homeless";FD:1;NM:1;LR:"thetoad";
 ID:7;X:-200896;Y:-200160;D:-1;MG:"I wonder if they want their homes anymore...";FD:1;NM:1;LR:"postoad";
 NPC_END
@@ -984,6 +985,7 @@ ET:"it";LH:["it1"];LS:["it2"];DS:1;AS:0;AX:0;AY:0;
 ET:"TV";LH:["T"];LS:["V"];DS:1;AS:0;AX:0;AY:0;
 ET:"kirby";LH:["fullby"];LS:["kirbfull"];DS:1;AS:0;AX:0;AY:0;
 ET:"hereComesAPrincess";AS:0;AX:0;AY:0;
-ET:"Whimsy - Start";LH:["pretoad","postoad"];LS:["thetoad"];SSS:["ID\:0\;BG\:7\;"];DS:1;AS:0;AX:0;AY:0;
-ET:"Whimsy - Stop";LH:["pretoad","thetoad"];LS:["postoad"];SSS:["ID\:0\;BG\:-2\;"];DS:1;AS:0;AX:0;AY:0;
+ET:"Whimsy - Start";LH:["pretoad","postoad","shroom"];LS:["thetoad"];SSS:["ID\:0\;BG\:7\;"];DS:1;AS:0;AX:0;AY:0;
+ET:"Whimsy - Stop";LH:["pretoad","thetoad"];LS:["postoad","shroom"];SSS:["ID\:0\;BG\:-2\;"];DS:1;AS:0;AX:0;AY:0;
+ET:"shroom";LS:["shroom"];AS:0;AX:0;AY:0;
 EVENTS_CLASSIC_END
