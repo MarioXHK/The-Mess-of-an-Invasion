@@ -16,3 +16,11 @@ It needs to be hit enough times in rapid succession for the comment machine to f
 
 (Might make it Minecraft themed)
 ]]
+
+local playerManager = require("playerManager")
+
+local whimsy = require("whimsy")
+
+playerManager.overrideCharacterLib(CHARACTER_ULTIMATERINKA,require("steve"))
+
+whimsy.pos = vector(-138816,-140256,3)

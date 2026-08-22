@@ -1,0 +1,7 @@
+playerblock=1
+playerblocktop=1
+npcblock=1
+npcblocktop=1
+noblockcollision=0
+nogravity=0
+name="Minecraft Sand"
