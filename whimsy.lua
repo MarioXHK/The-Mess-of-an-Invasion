@@ -1117,6 +1117,12 @@ local ogsection = nil
 
 whimsy.music = nil
 
+---@type Vector2|Vector3|nil
+whimsy.pos = nil
+
+---@type integer|nil
+whimsy.section = nil
+
 function whimsy.start()
     effectTimer = 0
     whimsy.effect = whimsy.startEffect
@@ -1127,6 +1133,19 @@ function whimsy.start()
         player.sectionObj.music = whimsy.music
         ogsection = player.section
     end
+    for _,p in ipairs(Player.get()) do
+        if whimsy.pos then
+            p.x = whimsy.pos.x-p.width/2
+            p.y = whimsy.pos.y-p.height
+            if whimsy.pos.z then
+                p.section = whimsy.pos.z
+            end
+        end
+        if whimsy.section then
+            p.section = whimsy.section
+        end
+    end
+
     triggerEvent(whimsy.startEvent)
 end
 
