@@ -5,7 +5,7 @@ puppet.lua made by MarioXHK. Give credit when using or else I'll find you and I'
 
 For the best experience when using this, use VScode and [LunaLua Intellisense.](https://www.smbxgame.com/forums/viewtopic.php?t=29691)
 
-v1.1
+v1.2
 ]]
 local puppet = {}
 
