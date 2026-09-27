@@ -1067,6 +1067,36 @@ whimsy.sporesfx = 52
 
 whimsy.path = "resources/"
 
+local function attemptResolveSFX(sound)
+    if not sound then return end
+    sound = tostring(sound)
+    local try = Misc.resolveSoundFile(whimsy.path..sound)
+    if try then
+        return try
+    else
+        try = Misc.resolveSoundFile("sfx/"..sound)
+        if try then
+            return try
+        else
+            if try then
+                return try
+            else
+                try = Misc.resolveSoundFile("resources/"..sound)
+                if try then
+                    return try
+                else
+                    try = Misc.resolveSoundFile(sound)
+                    if try then
+                        return try
+                    else
+                        return false
+                    end
+                end
+            end
+        end
+    end
+end
+
 whimsy.EFFECT_TYPE = {
     NONE = 0,
     SWIRL = 1,
@@ -1098,12 +1128,8 @@ local function trySFX(theSFX)
     elseif type(theSFX) == "function" then
         return theSFX()
 	else
-        if not resolvedSoundFiles[theSFX] then
-            if Misc.resolveSoundFile(whimsy.path..tostring(theSFX)) then
-                resolvedSoundFiles[theSFX] = Misc.resolveSoundFile(whimsy.path..tostring(theSFX))
-            elseif Misc.resolveSoundFile(theSFX) then
-                resolvedSoundFiles[theSFX] = Misc.resolveSoundFile(theSFX)
-            end
+        if resolvedSoundFiles[theSFX] == nil then
+            resolvedSoundFiles[theSFX] = attemptResolveSFX(theSFX)
         end
 
         if resolvedSoundFiles[theSFX] then
